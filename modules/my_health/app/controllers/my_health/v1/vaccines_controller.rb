@@ -11,7 +11,7 @@ module MyHealth
       end
 
       def show
-        vaccine_id = params[:id].try(:to_i)
+        vaccine_id = params[:id]
         resource = client.get_vaccine(vaccine_id)
         render json: resource.to_json
       rescue ::MedicalRecords::PatientNotFound

@@ -6,14 +6,14 @@ module MyHealth
 
     included do
       before_action :authorize
-      before_action :authenticate_client
+      # before_action :authenticate_client
     end
 
     protected
 
-    def authenticate_client
-      # The authenticate method checks whether the session is expired or incomplete before authenticating.
-      client.authenticate
-    end
+    # def authenticate_client
+    #   # The authenticate method checks whether the session is expired or incomplete before authenticating.
+    #   client.authenticate
+    # end
   end
 end

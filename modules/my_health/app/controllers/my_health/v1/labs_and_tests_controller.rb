@@ -9,7 +9,7 @@ module MyHealth
       end
 
       def show
-        record_id = params[:id].try(:to_i)
+        record_id = params[:id]
         resource = client.get_diagnostic_report(record_id)
         render json: resource.to_json
       end

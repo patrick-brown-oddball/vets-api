@@ -11,7 +11,7 @@ module MyHealth
       end
 
       def show
-        note_id = params[:id].try(:to_i)
+        note_id = params[:id]
         resource = client.get_clinical_note(note_id)
         raise Common::Exceptions::InternalServerError if resource.blank?
 

@@ -2,6 +2,9 @@
 
 MyHealth::Engine.routes.draw do
   namespace :v1 do
+    puts '************* my_health routes'
+    puts current_user
+    
     scope :medical_records do
       resources :session, only: %i[create], controller: 'medical_records/mr_session',
                           defaults: { format: :json } do

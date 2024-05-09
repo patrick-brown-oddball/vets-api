@@ -11,7 +11,8 @@ module MyHealth
       end
 
       def show
-        allergy_id = params[:id].try(:to_i)
+        allergy_id = params[:id]
+        puts "allergy_id: #{allergy_id}"
         resource = client.get_allergy(allergy_id)
         render json: resource.to_json
       rescue ::MedicalRecords::PatientNotFound
