@@ -16,6 +16,7 @@ module Vye
     def initialize(source:, locator:, bdn_clone: nil, records: {})
       raise ArgumentError, format('Invalid source: %<source>s', source:) unless sources.include?(source)
       raise ArgumentError, 'Missing profile' if records[:profile].blank?
+      raise ArgumentError, 'Missing locator' if locator.blank?
       raise ArgumentError, 'Missing bdn_clone' unless source == :tims_feed || bdn_clone.present?
 
       @bdn_clone = bdn_clone
