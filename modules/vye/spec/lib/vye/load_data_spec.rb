@@ -65,6 +65,8 @@ RSpec.describe Vye::LoadData do
 
     it 'reports the exception if source is invalid' do
       expect(Rails.logger).to receive(:error).with(/Loading data failed:/)
+      expect(StatsD).to receive(:increment).with('vye.load_data.failure.no_source')
+      expect(Sentry).to receive(:capture_exception).with(an_instance_of(ArgumentError))
 
       r = described_class.new(source: :something_else, locator:, bdn_clone:, records:)
 
@@ -73,6 +75,8 @@ RSpec.describe Vye::LoadData do
 
     it 'reports the exception if locator is blank' do
       expect(Rails.logger).to receive(:error).with(/Loading data failed:/)
+      expect(StatsD).to receive(:increment).with('vye.load_data.failure.bdn_feed')
+      expect(Sentry).to receive(:capture_exception).with(an_instance_of(ArgumentError))
 
       r = described_class.new(source:, locator: nil, bdn_clone:, records:)
 
@@ -81,6 +85,8 @@ RSpec.describe Vye::LoadData do
 
     it 'reports the exception if bdn_clone is blank' do
       expect(Rails.logger).to receive(:error).with(/Loading data failed:/)
+      expect(StatsD).to receive(:increment).with('vye.load_data.failure.bdn_feed')
+      expect(Sentry).to receive(:capture_exception).with(an_instance_of(ArgumentError))
 
       r = described_class.new(source:, locator:, bdn_clone: nil, records:)
 
@@ -89,6 +95,8 @@ RSpec.describe Vye::LoadData do
 
     it 'reports the exception if profile attributes hash is incorrect' do
       expect(Rails.logger).to receive(:error).with(/Loading data failed:/)
+      expect(StatsD).to receive(:increment).with('vye.load_data.failure.bdn_feed')
+      expect(Sentry).to receive(:capture_exception).with(an_instance_of(NoMatchingPatternKeyError))
 
       r = described_class.new(source:, locator:, bdn_clone:, records: records.merge(profile: { invalid: 'data' }))
 
