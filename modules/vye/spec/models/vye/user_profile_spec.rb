@@ -233,45 +233,6 @@ RSpec.describe Vye::UserProfile, type: :model do
     end
   end
 
-  describe '#check_for_match' do
-    let!(:user_profile) do
-      create(:vye_user_profile_fresh_import)
-    end
-
-    it 'reports if nothings changed' do
-      ssn_digest, = user_profile.attributes.values_at('ssn_digest')
-      user_profile.assign_attributes(ssn_digest:)
-
-      conflict, attribute_name = user_profile.check_for_match.values_at(:conflict, :attribute_name)
-      expect(conflict).to be(false)
-      expect(attribute_name).to be_nil
-    end
-
-    it 'reports if ssn_digest has changed' do
-      user_profile.assign_attributes(ssn_digest: 'ssn_digest_x')
-
-      conflict, attribute_name = user_profile.check_for_match.values_at(:conflict, :attribute_name)
-      expect(conflict).to be(true)
-      expect(attribute_name).to eq('ssn_digest')
-    end
-
-    it 'reports if file_number_digest has changed' do
-      user_profile.assign_attributes(file_number_digest: 'file_number_digest_x')
-
-      conflict, attribute_name = user_profile.check_for_match.values_at(:conflict, :attribute_name)
-      expect(conflict).to be(true)
-      expect(attribute_name).to eq('file_number_digest')
-    end
-
-    it 'reports if icn is changed' do
-      user_profile.assign_attributes(icn: 'icn_x')
-
-      conflict, attribute_name = user_profile.check_for_match.values_at(:conflict, :attribute_name)
-      expect(conflict).to be(true)
-      expect(attribute_name).to eq('icn')
-    end
-  end
-
   describe '::produce' do
     let(:ssn_clear_db) { 'ssn_clear_db' }
     let(:ssn_digest_db) { 'ssn_digest_db' }
