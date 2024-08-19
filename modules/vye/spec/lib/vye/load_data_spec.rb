@@ -103,4 +103,78 @@ RSpec.describe Vye::LoadData do
       expect(r.valid?).to be(false)
     end
   end
+
+  describe '#load_profile' do
+    let(:described_instance) { described_class.allocate }
+    let(:user_profile) { instance_double(Vye::UserProfile) }
+
+    before do
+      allow(described_instance).to receive(:load_info)
+      allow(described_instance).to receive(:load_address)
+      allow(described_instance).to receive(:load_awards)
+
+      allow(Vye::UserProfile).to receive(:produce).and_return(user_profile)
+    end
+
+    context 'when UserProfile gets loaded unchanged' do
+      before do
+        allow(user_profile).to receive_messages(
+          new_record?: false,
+          changed?: false
+        )
+      end
+
+      it "doesn't report an exception" do
+        described_instance.send(:initialize, source:, locator:, bdn_clone:, records:)
+
+        expect(described_instance.valid?).to be(true)
+      end
+    end
+
+    context 'when UserProfile gets loaded from BDN feed as a new record' do
+      before do
+        allow(user_profile).to receive(:new_record?).and_return(true)
+      end
+
+      it "doesn't report an exception" do
+        expect(StatsD).to receive(:increment).with('vye.load_data.user_profile.created')
+        expect(user_profile).to receive(:save!).and_return(true)
+
+        described_instance.send(:initialize, source:, locator:, bdn_clone:, records:)
+
+        expect(described_instance.valid?).to be(true)
+      end
+    end
+
+    context 'when UserProfile gets loaded from BDN feed with changed' do
+      before do
+        allow(user_profile).to(
+          receive_messages(
+            new_record?: false,
+            changed?: true,
+            id: 1,
+            changed_attributes: {
+              'ssn_digest' => 'old_ssn_digest',
+              'file_number' => 'old_file_number'
+            }
+          )
+        )
+      end
+
+      it "doesn't report an exception" do
+        expect(StatsD).to receive(:increment).with('vye.load_data.user_profile.updated')
+        expect(user_profile).to receive(:save!).and_return(true)
+
+        described_instance.send(:initialize, source:, locator:, bdn_clone:, records:)
+
+        expect(described_instance.valid?).to be(true)
+      end
+    end
+
+    # context 'when UserProfile gets loaded from TIMS feed as a new record' do
+    # end
+
+    # context 'when UserProfile gets loaded from TIMS feed with changed' do
+    # end
+  end
 end

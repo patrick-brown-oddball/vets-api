@@ -126,7 +126,8 @@ class Vye::UserProfile < ApplicationRecord
 
     user_profile = find_or_build(ssn_digest:, file_number_digest:)
     user_profile&.assign_attributes(**assignment)
-    user_profile&.check_for_match
+
+    user_profile
   end
 
   def self.find_or_build(ssn_digest:, file_number_digest:)

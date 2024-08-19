@@ -317,14 +317,11 @@ RSpec.describe Vye::UserProfile, type: :model do
         expect(described_class).to receive(:gen_digest).with(ssn_clear_req).and_return(ssn_digest_req)
         expect(described_class).to receive(:gen_digest).with(file_number_clear_req).and_return(file_number_digest_req)
 
-        found, conflict, attribute_name =
+        found =
           described_class
           .produce(ssn: ssn_clear_req, file_number: file_number_clear_req)
-          .values_at(:user_profile, :conflict, :attribute_name)
 
         expect(found).to eq(user_profile)
-        expect(conflict).to be(false)
-        expect(attribute_name).to be_nil
       end
     end
 
@@ -337,15 +334,12 @@ RSpec.describe Vye::UserProfile, type: :model do
         expect(described_class).to receive(:gen_digest).with(ssn_clear_req).and_return(ssn_digest_req)
         expect(described_class).to receive(:gen_digest).with(file_number_clear_req).and_return(file_number_digest_req)
 
-        user_profile, conflict, attribute_name =
+        user_profile =
           described_class
           .produce(ssn: ssn_clear_req, file_number: file_number_clear_req)
-          .values_at(:user_profile, :conflict, :attribute_name)
 
         expect(user_profile.attributes['ssn_digest']).to eq(ssn_digest_req)
         expect(user_profile.attributes['file_number_digest']).to eq(file_number_digest_req)
-        expect(conflict).to be(true)
-        expect(attribute_name).to eq('ssn_digest')
       end
     end
 
@@ -358,15 +352,12 @@ RSpec.describe Vye::UserProfile, type: :model do
         expect(described_class).to receive(:gen_digest).with(ssn_clear_req).and_return(ssn_digest_req)
         expect(described_class).to receive(:gen_digest).with(file_number_clear_req).and_return(file_number_digest_req)
 
-        user_profile, conflict, attribute_name =
+        user_profile =
           described_class
           .produce(ssn: ssn_clear_req, file_number: file_number_clear_req)
-          .values_at(:user_profile, :conflict, :attribute_name)
 
         expect(user_profile.attributes['ssn_digest']).to eq(ssn_digest_req)
         expect(user_profile.attributes['file_number_digest']).to eq(file_number_digest_req)
-        expect(conflict).to be(true)
-        expect(attribute_name).to eq('file_number_digest')
       end
     end
 
@@ -384,16 +375,13 @@ RSpec.describe Vye::UserProfile, type: :model do
         expect(described_class).to receive(:gen_digest).with(ssn_clear_req).and_return(ssn_digest_req)
         expect(described_class).to receive(:gen_digest).with(file_number_clear_req).and_return(file_number_digest_req)
 
-        user_profile, conflict, attribute_name =
+        user_profile =
           described_class
           .produce(ssn: ssn_clear_req, file_number: file_number_clear_req, icn: icn_req)
-          .values_at(:user_profile, :conflict, :attribute_name)
 
         expect(user_profile.attributes['ssn_digest']).to eq(ssn_digest_req)
         expect(user_profile.attributes['file_number_digest']).to eq(file_number_digest_req)
         expect(user_profile.attributes['icn']).to eq(icn_req)
-        expect(conflict).to be(true)
-        expect(attribute_name).to eq('icn')
       end
     end
   end

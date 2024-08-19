@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 module Vye
-  class UserProfileConflict < StandardError; end
-  class UserProfileNotFound < StandardError; end
-
   class LoadData
     STATSD_PREFIX = name.gsub('::', '.').underscore
     STATSD_NAMES =
@@ -13,7 +10,9 @@ module Vye
         tims_feed_failure: "#{STATSD_PREFIX}.failure.tims_feed",
         bdn_feed_failure: "#{STATSD_PREFIX}.failure.bdn_feed",
         user_profile_created: "#{STATSD_PREFIX}.user_profile.created",
-        user_profile_updated: "#{STATSD_PREFIX}.user_profile.updated"
+        user_profile_updated: "#{STATSD_PREFIX}.user_profile.updated",
+        user_profile_creation_skipped: "#{STATSD_PREFIX}.user_profile.creation_skipped",
+        user_profile_update_skipped: "#{STATSD_PREFIX}.user_profile.update_skipped"
       }.freeze
 
     SOURCES = %i[team_sensitive tims_feed bdn_feed].freeze
@@ -84,27 +83,53 @@ module Vye
 
     def load_profile(attributes)
       attributes || {} => {ssn:, file_number:} # this shouldn't throw NoMatchingPatternKeyError
+      user_profile = UserProfile.produce(attributes)
 
-      user_profile, conflict, attribute_name =
-        UserProfile
-        .produce(attributes)
-        .values_at(:user_profile, :conflict, :attribute_name)
-
-      if user_profile.new_record? && source == :tims_feed
-        raise UserProfileNotFound
-      elsif conflict == true && source == :tims_feed
-        raise UserProfileConflict
-      elsif conflict == true
-        message =
-          format(
-            'Updated conflict for %<attribute_name>s from BDN feed line: %<locator>s',
-            attribute_name:, locator:
-          )
-        Rails.logger.info message
+      unless user_profile.new_record? || user_profile.changed?
+        # as time goes on this should be whats mostly happening
+        @user_profile = user_profile
+        return true
       end
 
-      user_profile.save!
-      @user_profile = user_profile
+      if source == :tims_feed && user_profile.new_record?
+        # we are not going to create a new record based of off the TIMS feed
+        StatsD.increment(STATSD_NAMES[:user_profile_creation_skipped])
+        return false
+      end
+
+      if source == :tims_feed && user_profile.changed?
+        # we are not updating a record conflict from TIMS
+        StatsD.increment(STATSD_NAMES[:user_profile_update_skipped])
+        return false
+      end
+
+      if user_profile.new_record?
+        # we are going to count the number of records created
+        # this should be decreasing over time
+        StatsD.increment(STATSD_NAMES[:user_profile_created])
+        user_profile.save!
+        @user_profile = user_profile
+        return true
+      end
+
+      if user_profile.changed?
+        # this shouldn't be happening
+        # we will update a record conflict from BDN (or TeamSensitive),
+        # but need to investigate why this is happening
+        user_profile_id = user_profile.id
+        changed_attributes = user_profile.changed_attributes
+
+        format(
+          'UserProfile(%<user_profile_id>u) updated %<changed_attributes>p from BDN feed line: %<locator>s',
+          user_profile_id:, changed_attributes:, locator:
+        ).tap do |msg|
+          Rails.logger.warn msg
+        end
+        StatsD.increment(STATSD_NAMES[:user_profile_updated])
+        user_profile.save!
+        @user_profile = user_profile
+        true
+      end
     end
 
     def load_info(attributes)
