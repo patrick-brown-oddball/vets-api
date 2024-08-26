@@ -15,6 +15,12 @@ module Mobile
         private
 
         def parse_control_information(account_control_info)
+          unless account_control_info.is_a?(Hash)
+            raise Common::Exceptions::UnprocessableEntity.new(
+              detail: 'Response contains no control information', source: self.class.to_s
+            )
+          end
+
           {
             can_update_address: account_control_info['can_update_direct_deposit'],
             corp_avail_indicator: account_control_info['is_corp_available'],
@@ -30,6 +36,11 @@ module Mobile
         end
 
         def parse_payment_account(payment_account_info)
+          unless payment_account_info.is_a?(Hash)
+            raise Common::Exceptions::UnprocessableEntity.new(
+              detail: 'Response contains no payment information', source: self.class.to_s
+            )
+          end
           {
             account_type: payment_account_info[:account_type],
             financial_institution_name: payment_account_info[:name],

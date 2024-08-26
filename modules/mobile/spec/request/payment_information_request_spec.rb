@@ -63,6 +63,15 @@ RSpec.describe 'payment information', type: :request do
       end
     end
 
+    context 'with a 200 response is missing data' do
+      it 'returns 422' do
+        VCR.use_cassette('lighthouse/direct_deposit/show/200_no_data') do
+          get '/mobile/v0/payment-information/benefits', headers: sis_headers
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+    end
+
     context 'with a 403 response' do
       it 'returns a not authorized response' do
         VCR.use_cassette('mobile/direct_deposit/show/403_forbidden') do
