@@ -1952,8 +1952,7 @@ module PdfFill
       end
 
       def check_net_worth(net_worth)
-        return if net_worth.empty?
-        net_worth&.to_i > 130_773
+        net_worth.to_i > 130_773 if !net_worth&.empty?
       end
 
       def add_dependent_income(dependent_name, dependent_income)
