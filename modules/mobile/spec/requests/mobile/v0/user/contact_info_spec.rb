@@ -2,7 +2,6 @@
 
 require_relative '../../../../support/helpers/rails_helper'
 RSpec.describe 'Mobile::V0::User::ContactInfo', type: :request do
-  Flipper.disable(:va_v3_contact_information_service)
 
   let!(:user) { sis_user }
   let(:attributes) { response.parsed_body.dig('data', 'attributes') }
@@ -14,6 +13,25 @@ RSpec.describe 'Mobile::V0::User::ContactInfo', type: :request do
       'addressLine2' => nil,
       'addressLine3' => nil,
       'addressPou' => 'RESIDENCE/CHOICE',
+      'addressType' => 'DOMESTIC',
+      'city' => 'Washington',
+      'countryName' => 'USA',
+      'countryCodeIso3' => 'USA',
+      'internationalPostalCode' => nil,
+      'province' => nil,
+      'stateCode' => 'DC',
+      'zipCode' => '20011',
+      'zipCodeSuffix' => nil
+    }
+  end
+
+  let(:residential_address_v2) do
+    {
+      'id' => 123,
+      'addressLine1' => '140 Rock Creek Rd',
+      'addressLine2' => nil,
+      'addressLine3' => nil,
+      'addressPou' => 'RESIDENCE',
       'addressType' => 'DOMESTIC',
       'city' => 'Washington',
       'countryName' => 'USA',

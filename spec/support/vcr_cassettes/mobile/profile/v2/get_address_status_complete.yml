@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: <VAPROFILE_URL>/contact-information-hub/contact-information/v2/addresses/status/0ea91332-4713-4008-bd57-40541ee8d4d4
+    uri: <VAPROFILE_URL>/contact-information-hub/contact-information/v2/addresses/status/7c198f17-a3b8-415f-b0fd-e19ab1edcf3a
     body:
       encoding: US-ASCII
       string: ''
@@ -26,10 +26,10 @@ http_interactions:
       - 'true'
       - 'true'
       Server-Timing:
-      - dtRpid;desc="-1504319669", dtSInfo;desc="0"
-      - dtRpid;desc="-197812444", dtSInfo;desc="0"
+      - dtRpid;desc="-831551951", dtSInfo;desc="0"
+      - dtRpid;desc="720937835", dtSInfo;desc="0"
       Vaprofiletxauditid:
-      - 81891db1-9784-46a1-adcb-95f31ef25057
+      - 19a57af7-8827-4c08-9487-af8d68124fd3
       X-Content-Type-Options:
       - nosniff
       X-Xss-Protection:
@@ -46,7 +46,7 @@ http_interactions:
       - 'default-src ''self'' ''unsafe-eval'' ''unsafe-inline'' data: filesystem:
         about: blob: ws: wss:'
       Date:
-      - Thu, 12 Sep 2024 16:06:29 GMT
+      - Wed, 18 Sep 2024 19:08:07 GMT
       Referrer-Policy:
       - no-referrer
       Content-Type:
@@ -57,9 +57,9 @@ http_interactions:
       - max-age=16000000; includeSubDomains; preload;
     body:
       encoding: UTF-8
-      string: '{"txAuditId":"0ea91332-4713-4008-bd57-40541ee8d4d4","status":"COMPLETED_SUCCESS","txStatus":"COMPLETED_SUCCESS","txType":"PUSH","txInteractionType":"ATTENDED","txPushInput":{"sourceDate":"2024-08-28T18:51:06Z","originatingSourceSystem":"VETSGOV","sourceSystemUser":"1234","addressId":15035,"addressPOU":"RESIDENCE","addressLine1":"1494
-        Martin Luther King Rd","cityName":"Fulton","zipCode5":"38843","country":{}},"txOutput":[{"createDate":"2018-09-05T16:58:15Z","updateDate":"2024-09-12T16:06:11Z","txAuditId":"0ea91332-4713-4008-bd57-40541ee8d4d4","sourceSystem":"VETSGOV","sourceDate":"2024-08-28T18:51:06Z","originatingSourceSystem":"VETSGOV","sourceSystemUser":"1234","effectiveStartDate":"2024-08-28T18:51:06Z","vaProfileId":1,"addressId":15035,"addressType":"Domestic","addressPOU":"RESIDENCE","addressLine1":"1494
+      string: '{"txAuditId":"7c198f17-a3b8-415f-b0fd-e19ab1edcf3a","status":"COMPLETED_SUCCESS","txStatus":"COMPLETED_SUCCESS","txType":"PUSH","txInteractionType":"ATTENDED","txPushInput":{"sourceDate":"2024-09-16T16:09:37.000Z","originatingSourceSystem":"VETSGOV","sourceSystemUser":"123498767V234859","effectiveStartDate":"2024-09-16T16:09:37.000Z","addressId":577127,"addressPOU":"RESIDENCE","addressLine1":"1494
+        Martin Luther King Rd","cityName":"Fulton","zipCode5":"38843","country":{}},"txOutput":[{"createDate":"2024-08-29T21:08:17Z","updateDate":"2024-09-18T19:07:30Z","txAuditId":"7c198f17-a3b8-415f-b0fd-e19ab1edcf3a","sourceSystem":"VETSGOV","sourceDate":"2024-09-16T16:09:37.000Z","originatingSourceSystem":"VETSGOV","sourceSystemUser":"123498767V234859","effectiveStartDate":"2024-09-16T16:09:37.000Z","vaProfileId":1781151,"addressId":577127,"addressType":"Domestic","addressPOU":"RESIDENCE","addressLine1":"1494
         Martin Luther King Rd","cityName":"Fulton","state":{"stateName":"Mississippi","stateCode":"MS"},"zipCode5":"38843","county":{"countyName":"Itawamba
-        County","countyCode":"28057"},"country":{"countryName":"United States","countryCodeFIPS":"US","countryCodeISO2":"US","countryCodeISO3":"USA"},"latitude":"34.1987","longitude":"-88.5259","geocodePrecision":"31","geocodeDate":"2024-09-12T16:06:11Z"}]}'
-  recorded_at: Thu, 12 Sep 2024 16:06:29 GMT
+        County","countyCode":"28057"},"country":{"countryName":"United States","countryCodeFIPS":"US","countryCodeISO2":"US","countryCodeISO3":"USA"},"latitude":"34.1989","longitude":"-88.5261","geocodePrecision":"31","geocodeDate":"2024-09-18T19:07:30Z"}]}'
+  recorded_at: Wed, 18 Sep 2024 19:08:08 GMT
 recorded_with: VCR 6.3.1

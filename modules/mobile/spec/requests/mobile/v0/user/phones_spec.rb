@@ -12,7 +12,6 @@ RSpec.describe 'Mobile::V0::User::Phones', type: :request do
   end
   let(:telephone) { build(:telephone, vet360_id: user.vet360_id) }
 
-  Flipper.disable(:va_v3_contact_information_service)
   describe 'POST /mobile/v0/user/phones' do
     context 'with a valid phone number' do
       before do
@@ -192,65 +191,69 @@ RSpec.describe 'Mobile::V0::User::Phones', type: :request do
     end
   end
 
-  # describe 'POST /mobile/v0/user/phones v2' do
-  #   before do
-  #     Flipper.enable(:va_v3_contact_information_service)
-  #   end
+  describe 'POST /mobile/v0/user/phones v2' do
+    let(:telephone) { build(:telephone, :contact_info_v2, vet360_id: user.vet360_id) }
+    before do
+      Flipper.enable(:va_v3_contact_information_service)
+    end
 
-  #   after do
-  #     Flipper.disable(:va_v3_contact_information_service)
-  #   end
-  #   context 'with a valid phone number' do
-  #     before do
-  #       VCR.use_cassette('va_profile/v2/contact_information/post_telephone_transaction_status') do
-  #         VCR.use_cassette('va_profile/v2/contact_information/post_telephone_success') do
-  #           post('/mobile/v0/user/phones', params: telephone.to_json, headers:)
-  #         end
-  #       end
-  #     end
+    after do
+      Flipper.disable(:va_v3_contact_information_service)
+    end
+    context 'with a valid phone number' do
+      before do
+        VCR.use_cassette('va_profile/v2/contact_information/telephone_post_transaction_status') do
+          VCR.use_cassette('va_profile/v2/contact_information/post_telephone_success') do
+            VCR.use_cassette('va_profile/v2/contact_information/person_full') do
+              post('/mobile/v0/user/phones', params: telephone.to_json, headers:)
+            end
+          end
+        end
+      end
 
-  #     it 'returns a 200' do
-  #       expect(response).to have_http_status(:ok)
-  #     end
+      it 'returns a 200' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
 
-  #     it 'matches the expected schema' do
-  #       expect(response.body).to match_json_schema('profile_update_response')
-  #     end
+    #   it 'matches the expected schema' do
+    #     expect(response.body).to match_json_schema('profile_update_response')
+    #   end
 
-  #     it 'includes a transaction id' do
-  #       id = JSON.parse(response.body).dig('data', 'attributes', 'transactionId')
-  #       expect(id).to eq('57d5364b-149a-4802-bc18-b9b0b0742db6')
-  #     end
-  #   end
+    #   it 'includes a transaction id' do
+    #     id = JSON.parse(response.body).dig('data', 'attributes', 'transactionId')
+    #     expect(id).to eq('57d5364b-149a-4802-bc18-b9b0b0742db6')
+    #   end
+    # end
 
-  #   context 'with missing params' do
-  #     before do
-  #       telephone.phone_number = ''
-  #       post('/mobile/v0/user/phones', params: telephone.to_json, headers:)
-  #     end
+    # context 'with missing params' do
+    #   before do
+    #     telephone.phone_number = ''
+    #     post('/mobile/v0/user/phones', params: telephone.to_json, headers:)
+    #   end
 
-  #     it 'returns a 422' do
-  #       expect(response).to have_http_status(:unprocessable_entity)
-  #     end
+    #   it 'returns a 422' do
+    #     expect(response).to have_http_status(:unprocessable_entity)
+    #   end
 
-  #     it 'matches the error schema' do
-  #       expect(response.body).to match_json_schema('errors')
-  #     end
+    #   it 'matches the error schema' do
+    #     expect(response.body).to match_json_schema('errors')
+    #   end
 
-  #     it 'has a helpful error message' do
-  #       message = response.parsed_body['errors'].first
-  #       expect(message).to eq(
-  #         {
-  #           'title' => "Phone number can't be blank",
-  #           'detail' => "phone-number - can't be blank",
-  #           'code' => '100',
-  #           'source' => {
-  #             'pointer' => 'data/attributes/phone-number'
-  #           },
-  #           'status' => '422'
-  #         }
-  #       )
-  #     end
-  #   end
-  # end
+    #   it 'has a helpful error message' do
+    #     message = response.parsed_body['errors'].first
+    #     expect(message).to eq(
+    #       {
+    #         'title' => "Phone number can't be blank",
+    #         'detail' => "phone-number - can't be blank",
+    #         'code' => '100',
+    #         'source' => {
+    #           'pointer' => 'data/attributes/phone-number'
+    #         },
+    #         'status' => '422'
+    #       }
+    #     )
+    #   end
+    # end
+  end
 end

@@ -135,7 +135,6 @@ module AsyncTransaction
       # @return [Array] an array of any outstanding transactions
       def self.last_ongoing_transactions_for_user(user)
         ongoing_transactions = []
-
         %w[
           Address
           Email

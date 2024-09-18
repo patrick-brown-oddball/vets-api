@@ -6,6 +6,7 @@ module Mobile
   module V0
     class PhonesController < ProfileBaseController
       def create
+        binding.pry
         render_transaction_to_json(
           service.save_and_await_response(resource_type: :telephone, params: phone_params)
         )

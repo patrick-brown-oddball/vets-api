@@ -34,7 +34,6 @@ module Mobile
         def save_and_await_response(resource_type:, params:, update: false)
           http_method = update ? 'put' : 'post'
           initial_transaction = save!(http_method, resource_type, params)
-
           # return non-received status transactions (errors)
           return initial_transaction unless initial_transaction.transaction_status == TRANSACTION_RECEIVED
 
@@ -52,7 +51,6 @@ module Mobile
         def save!(http_method, resource_type, params)
           record = build_record(resource_type, params)
           raise Common::Exceptions::ValidationErrors, record unless record.valid?
-
           response = contact_information_service.send("#{http_method}_#{resource_type.downcase}", record)
           "AsyncTransaction::VAProfile::#{resource_type.capitalize}Transaction".constantize.start(@user, response)
         end
@@ -115,7 +113,6 @@ module Mobile
 
         def check_transaction_status!(transaction_id)
           @transaction_id = transaction_id
-
           transaction = AsyncTransaction::VAProfile::Base.refresh_transaction_status(
             @user,
             contact_information_service,
@@ -129,7 +126,11 @@ module Mobile
         end
 
         def contact_information_service
-          VAProfile::ContactInformation::Service.new @user
+          if Flipper.enabled?(:va_v3_contact_information_service, @user)
+            VAProfile::V2::ContactInformation::Service.new @user
+          else
+            VAProfile::ContactInformation::Service.new @user
+          end
         end
 
         def raise_timeout_error(_elapsed, _try)
