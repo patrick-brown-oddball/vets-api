@@ -51,6 +51,7 @@ module RepresentationManagement
       # A list of all classes that have swagger_* declarations.
       SWAGGERED_CLASSES = [
         Requests::PdfGenerator2122,
+        Requests::PdfGenerator2122a,
         Requests::PowerOfAttorney,
         Responses::PowerOfAttorneyResponse,
         Errors,
