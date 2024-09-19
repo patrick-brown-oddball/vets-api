@@ -198,6 +198,67 @@ module Requests
                 key :example, 'veteran@example.com'
               end
             end
+            property :representative do
+              key :type, :object
+              property :type do
+                key :type, :string
+                key :example, 'Attorney'
+              end
+              property :phone do
+                key :type, :string
+                key :example, '1234567890'
+              end
+              property :email do
+                key :type, :string
+                key :example, 'representative@example.com'
+              end
+              property :name do
+                key :type, :object
+                property :first do
+                  key :type, :string
+                  key :example, 'John'
+                end
+                property :middle do
+                  key :type, :string
+                  key :example, 'A'
+                end
+                property :last do
+                  key :type, :string
+                  key :example, 'Doe'
+                end
+              end
+              property :address do
+                key :type, :object
+                property :address_line1 do
+                  key :type, :string
+                  key :example, '123 Main St'
+                end
+                property :address_line2 do
+                  key :type, :string
+                  key :example, 'Apt 1'
+                end
+                property :city do
+                  key :type, :string
+                  key :example, 'Springfield'
+                end
+                property :state_code do
+                  key :type, :string
+                  key :example, 'IL'
+                end
+                property :country do
+                  key :type, :string
+                  key :example, 'US'
+                end
+                property :zip_code do
+                  key :type, :string
+                  key :example, '62704'
+                end
+                property :zip_code_suffix do
+                  key :type, :string
+                  key :example, '1234'
+                end
+              end
+            end
           end
         end
 
