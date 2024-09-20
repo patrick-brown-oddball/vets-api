@@ -28,6 +28,8 @@ module ClaimsApi
 
         ClaimsApi::Logger.log('poa', poa_id: poa_form.id, detail: 'BIRLS Success')
 
+        send_notification_email
+
         ClaimsApi::PoaVBMSUpdater.perform_async(poa_form.id) if enable_vbms_access?(poa_form:)
       else
         poa_form.status = ClaimsApi::PowerOfAttorney::ERRORED
@@ -42,6 +44,60 @@ module ClaimsApi
 
     def enable_vbms_access?(poa_form:)
       poa_form.form_data['recordConsent'] && poa_form.form_data['consentLimits'].blank?
+    end
+
+    def send_notification_email
+      template_name = "#{appeal_type_name}_received#{appeal.non_veteran_claimant? ? '_claimant' : ''}"
+      template_id = Settings.vanotify.services.lighthouse.template_id[template_name]
+
+      if template_id.blank?
+        ClaimsApi::Logger.log('poa', poa_id: poa_form.id,
+                                     detail: "Could not find VANotify template for #{template_name}")
+      end
+
+      vanotify_service.send_email(
+        {
+          **identifier,
+          personalisation: {
+            first_name:,
+            last_name:,
+            representative_type:,
+            rep_first_name:,
+            rep_last_name:,
+            org_name:,
+            address1:,
+            address2:,
+            city:,
+            state:,
+            zip:,
+            email:,
+            phone:
+          },
+          template_id:
+        }
+      )
+
+      vanotify_service.send_email(
+        {
+          **identifier,
+          personalisation: {
+            first_name:,
+            last_name:,
+            org_name:,
+            address1:,
+            address2:,
+            city:,
+            state:,
+            zip:,
+            phone:
+          },
+          template_id:
+        }
+      )
+    end
+
+    def vanotify_service
+      @vanotify_service ||= VaNotify::Service.new(Settings.vanotify.services.lighthouse.api_key)
     end
   end
 end
