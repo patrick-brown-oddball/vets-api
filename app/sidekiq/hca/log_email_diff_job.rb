@@ -6,8 +6,7 @@ module HCA
     sidekiq_options retry: false
 
     def perform(in_progress_form_id, user_uuid)
-      redis_key = "HCA::LogEmailDiffJob:#{user_uuid}"
-      return if $redis.get(redis_key).present?
+      return if HCA::LogEmailDiffJobStatus.exists?(user_uuid)
 
       in_progress_form = InProgressForm.find_by(id: in_progress_form_id)
       return if in_progress_form.nil?
@@ -26,7 +25,7 @@ module HCA
       StatsD.increment(
         "api.1010ez.in_progress_form_email.#{tag_text}"
       )
-      $redis.set(redis_key, 't')
+      HCA::LogEmailDiffJobStatus.set_key(user_uuid)
     end
   end
 end
