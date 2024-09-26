@@ -208,6 +208,9 @@ development: &defaults
   form_1010_cg_submission_job_claim:
     namespace: Form1010cg::SubmissionJob
     each_ttl: 1000000 # persisted for at least 22 sidekiq retries
+  hca_log_email_diff_job_status:
+    namespace: HCA::LogEmailDiffJob
+    each_ttl: -1
 test:
   <<: *defaults
   redis:
