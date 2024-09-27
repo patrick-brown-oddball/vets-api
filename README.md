@@ -45,6 +45,16 @@ For frontend, see [vets-website](https://github.com/department-of-veterans-affai
      saml:
        authn_requests_signed: false
      ```
+### Setup ngrok 
+ngrok is a reverse proxy that secures your applications and network services. This is environment independent because it can deliver traffic to services running anywhere with no changes to your environment's network. Ngrok helps you to develop and test, remote access and ingress to external networks & production. 
+
+* Use your github creds to signup here https://ngrok.com/blog-post/free-static-domains-ngrok-users
+* Ensure your settings.local.yml virtual_host settings contains as shown 
+  virtual_hosts: [
+      "127.0.0.1",
+      "localhost",
+      "herring-hot-repeatedly.ngrok-free.app",
+    ] 
 
 1. If you are developing features that need Sidekiq Enterprise, you must have access to the va.gov-team-sensitive repo and [install the sidekiq enterprise license](https://github.com/department-of-veterans-affairs/va.gov-team-sensitive/blob/master/platform/engineering/sidekiq-enterprise-setup.md)
 
