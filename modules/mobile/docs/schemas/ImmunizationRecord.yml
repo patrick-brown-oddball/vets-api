@@ -41,7 +41,8 @@ properties:
         type: string, null
         example: "FLU"
       manufacturer:
-        type: string, null
+        type: string
+        nullable: true
         example: nil
       note:
         type: string, null
@@ -64,7 +65,8 @@ properties:
           - links
         properties:
           data:
-            type: [object, null]
+            type: object
+            nullable: true
             required:
               - id
               - type
@@ -81,5 +83,6 @@ properties:
               - related
             properties:
               related:
-                type: [string, null]
+                type: string
+                nullable: true
                 example: "staging-api.va.gov/mobile/v0/health/locations/I2-2FPCKUIXVR7RJLLG34XVWGZERM000000"

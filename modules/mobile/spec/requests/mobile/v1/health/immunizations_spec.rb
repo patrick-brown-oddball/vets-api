@@ -4,6 +4,7 @@ require_relative '../../../../support/helpers/rails_helper'
 
 RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, type: :request do
   include JsonSchemaMatchers
+  include Committee::Rails::Test::Methods
 
   let!(:user) { sis_user(icn: '9000682') }
   let(:rsa_key) { OpenSSL::PKey::RSA.generate(2048) }
@@ -16,6 +17,10 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
   end
 
   after { Timecop.return }
+
+  def committee_options
+    @committee_options ||= { schema_path: Rails.root.join('modules', 'mobile', 'docs', 'openapi.json').to_s }
+  end
 
   describe 'GET /mobile/v1/health/immunizations' do
     context 'when the expected fields have data' do
@@ -30,7 +35,7 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
       end
 
       it 'matches the expected schema' do
-        expect(response.body).to match_json_schema('v1/immunizations')
+        assert_schema_conform(200)
       end
 
       context 'for items that do not have locations' do

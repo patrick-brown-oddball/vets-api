@@ -192,6 +192,7 @@ group :test do
   gem 'super_diff'
   gem 'vcr'
   gem 'webrick'
+  gem 'committee-rails'
 end
 
 group :development, :test do
