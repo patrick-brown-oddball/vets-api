@@ -1726,3 +1726,6 @@ features:
   show_yellow_ribbon_table:
     actor_type: user
     description: Used to show yellow ribbon table in Comparison Tool
+  show_lc_in_comparison_tool:
+    actor_type: user
+    description: Used to show the licenses and certifications Search and Search Results pages in Comparison Tool
