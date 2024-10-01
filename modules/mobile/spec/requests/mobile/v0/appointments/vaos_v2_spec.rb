@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require_relative '../../../../support/helpers/rails_helper'
+require_relative '../../../../support/helpers/committee_helper'
 
 RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
   include JsonSchemaMatchers
+  include Committee::Rails::Test::Methods
 
   let!(:user) { sis_user(icn: '1012846043V576341', vha_facility_ids: [402, 555]) }
 
@@ -61,6 +63,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
               end
             end
             expect(response).to have_http_status(:ok)
+            assert_schema_conform(200)
           end
         end
       end

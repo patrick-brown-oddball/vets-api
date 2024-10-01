@@ -1,18 +1,11 @@
 # frozen_string_literal: true
 
 require_relative '../../../../support/helpers/rails_helper'
+require_relative '../../../../support/helpers/committee_helper'
 
 RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, type: :request do
   include JsonSchemaMatchers
   include Committee::Rails::Test::Methods
-
-  RSpec.configure do |config|
-    config.add_setting :committee_options
-    config.committee_options = {
-      schema_path: Rails.root.join('modules', 'mobile', 'docs', 'openapi.json').to_s,
-      prefix: '/mobile'
-    }
-  end
 
   let!(:user) { sis_user(icn: '9000682') }
   let(:rsa_key) { OpenSSL::PKey::RSA.generate(2048) }

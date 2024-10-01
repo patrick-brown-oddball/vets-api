@@ -10,25 +10,11 @@ properties:
   meta:
     type: object
     required:
-      - errors
-      - checkinWindow
       - upcomingAppointmentsCount
       - upcomingDaysLimit
     properties:
       errors:
         type: [array, null]
-      checkinWindow:
-        type: object
-        required:
-          - minutesBefore
-          - minutesAfter
-        properties:
-          minutesBefore:
-            type: integer
-            example: 45
-          minutesAfter:
-            type: integer
-            example: 15
       upcomingAppointmentsCount:
         type: number
         description: The number of BOOKED, non-pending appointments in the next upcomingDaysLimit number of days.

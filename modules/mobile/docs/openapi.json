@@ -8851,8 +8851,6 @@
               "appointmentIen",
               "cancelId",
               "comment",
-              "clinicId",
-              "facilityId",
               "healthcareProvider",
               "healthcareService",
               "location",
@@ -8866,8 +8864,7 @@
               "timeZone",
               "vetextId",
               "reason",
-              "isCovidVaccine",
-              "locationId"
+              "isCovidVaccine"
             ],
             "properties": {
               "appointmentType": {
@@ -8884,10 +8881,12 @@
               },
               "appointmentIen": {
                 "type": "string",
+                "nullable": true,
                 "example": 19648
               },
               "cancelId": {
                 "type": "string",
+                "nullable": true,
                 "example": "MzA4OzIwMjAxMTAzLjA5MDAwMDs0NDI7Q0hZIFBDIEtJTFBBVFJJQ0s="
               },
               "comment": {
@@ -8896,29 +8895,36 @@
               },
               "healthcareProvider": {
                 "type": "string",
+                "nullable": true,
                 "example": "John Smith"
               },
               "healthcareService": {
-                "type": null,
+                "type": "string",
+                "nullable": true,
                 "example": null,
                 "description": "This is deprecated and will always return null. It is still included for backwards compatibility."
               },
               "location": {
                 "type": "object",
                 "required": [
+                  "id",
                   "name",
                   "address",
-                  "phoneNumber",
+                  "lat",
+                  "long",
+                  "phone",
                   "url",
                   "code"
                 ],
                 "properties": {
                   "id": {
                     "type": "string",
+                    "nullable": true,
                     "example": 442
                   },
                   "name": {
                     "type": "string",
+                    "nullable": true,
                     "example": "VA Long Beach Healthcare System"
                   },
                   "address": {
@@ -8932,57 +8938,69 @@
                     "properties": {
                       "street": {
                         "type": "string",
+                        "nullable": true,
                         "example": "5901 East 7th Street, Building 166"
                       },
                       "city": {
                         "type": "string",
+                        "nullable": true,
                         "example": "Long Beach"
                       },
                       "state": {
                         "type": "string",
+                        "nullable": true,
                         "example": "CA"
                       },
                       "zipCode": {
                         "type": "string",
+                        "nullable": true,
                         "example": 90822
                       }
                     }
                   },
                   "lat": {
                     "type": "float",
+                    "nullable": true,
                     "example": 33.77005
                   },
                   "long": {
                     "type": "float",
+                    "nullable": true,
                     "example": -118.193741
                   },
                   "phone": {
                     "type": "object",
                     "required": [
+                      "areaCode",
                       "number",
                       "extension"
                     ],
                     "properties": {
                       "areaCode": {
                         "type": "string",
+                        "nullable": true,
                         "example": 562
                       },
                       "number": {
                         "type": "string",
+                        "nullable": true,
                         "example": "434-6008"
                       },
                       "extension": {
                         "type": "string",
+                        "nullable": true,
                         "example": 1001
                       }
                     }
                   },
                   "url": {
                     "type": "string",
+                    "nullable": true,
                     "example": "https://care2.evn.va.gov/vvc-app/?join=1&media=1&escalate=1&conference=VVC8275247@care2.evn.va.gov&pin=3242949390#"
                   },
                   "code": {
                     "type": "string",
+                    "nullable": true,
                     "example": "GL32C"
                   }
                 }
@@ -8993,6 +9011,7 @@
               },
               "minutesDuration": {
                 "type": "integer",
+                "nullable": true,
                 "example": 60
               },
               "phoneOnly": {
@@ -9052,6 +9071,7 @@
               },
               "proposedTimes": {
                 "type": "array",
+                "nullable": true,
                 "example": [
                   {
                     "date": "10/01/2020",
@@ -9073,14 +9093,17 @@
               },
               "patientPhoneNumber": {
                 "type": "string",
+                "nullable": true,
                 "example": "123-456-7890"
               },
               "patientEmail": {
                 "type": "string",
+                "nullable": true,
                 "example": "someone@example.com"
               },
               "bestTimeToCall": {
                 "type": "array",
+                "nullable": true,
                 "example": [
                   "Morning",
                   "Afternoon",
@@ -9093,11 +9116,8 @@
               },
               "serviceCategoryName": {
                 "type": "string",
+                "nullable": true,
                 "example": "COMPENSATION & PENSION"
-              },
-              "locationId": {
-                "type": "string",
-                "example": "983"
               }
             }
           }
@@ -9119,8 +9139,6 @@
           "meta": {
             "type": "object",
             "required": [
-              "errors",
-              "checkinWindow",
               "upcomingAppointmentsCount",
               "upcomingDaysLimit"
             ],
@@ -9130,23 +9148,6 @@
                   "array",
                   null
                 ]
-              },
-              "checkinWindow": {
-                "type": "object",
-                "required": [
-                  "minutesBefore",
-                  "minutesAfter"
-                ],
-                "properties": {
-                  "minutesBefore": {
-                    "type": "integer",
-                    "example": 45
-                  },
-                  "minutesAfter": {
-                    "type": "integer",
-                    "example": 15
-                  }
-                }
               },
               "upcomingAppointmentsCount": {
                 "type": "number",

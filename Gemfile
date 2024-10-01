@@ -180,6 +180,7 @@ end
 
 group :test do
   gem 'apivore', git: 'https://github.com/department-of-veterans-affairs/apivore', tag: 'v2.0.0.vsp'
+  gem 'committee-rails'
   gem 'mock_redis'
   gem 'pdf-inspector'
   gem 'rspec_junit_formatter'
@@ -192,7 +193,6 @@ group :test do
   gem 'super_diff'
   gem 'vcr'
   gem 'webrick'
-  gem 'committee-rails'
 end
 
 group :development, :test do
