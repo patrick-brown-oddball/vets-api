@@ -8891,6 +8891,7 @@
               },
               "comment": {
                 "type": "string",
+                "nullable": true,
                 "example": "Please arrive 20 minutes before the start of your appointment"
               },
               "healthcareProvider": {
@@ -9007,6 +9008,7 @@
               },
               "physicalLocation": {
                 "type": "string",
+                "nullable": true,
                 "example": "Blind Rehabilitation Center"
               },
               "minutesDuration": {
@@ -9039,6 +9041,7 @@
               },
               "statusDetail": {
                 "type": "string",
+                "nullable": true,
                 "description": "For a cancelled appointment return details about who or why it was cancelled.",
                 "enum": [
                   "CANCELLED BY CLINIC & AUTO RE-BOOK",
@@ -9051,6 +9054,7 @@
               },
               "timeZone": {
                 "type": "string",
+                "nullable": true,
                 "example": "America/Los_Angeles"
               },
               "vetextId": {
@@ -9059,6 +9063,7 @@
               },
               "reason": {
                 "type": "string",
+                "nullable": true,
                 "example": "Follow-up/Routine: Reason 1"
               },
               "isCovidVaccine": {
@@ -9089,6 +9094,7 @@
               },
               "typeOfCare": {
                 "type": "string",
+                "nullable": true,
                 "example": "Primary Care"
               },
               "patientPhoneNumber": {
@@ -9112,6 +9118,7 @@
               },
               "friendlyLocationName": {
                 "type": "string",
+                "nullable": true,
                 "example": "CHYSHR-Cheyenne VA Medical Center"
               },
               "serviceCategoryName": {

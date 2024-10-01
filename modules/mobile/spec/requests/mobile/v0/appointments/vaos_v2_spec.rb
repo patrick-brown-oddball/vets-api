@@ -40,6 +40,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
           it 'returns forbidden' do
             get('/mobile/v0/appointments', headers: sis_headers, params:)
             expect(response).to have_http_status(:forbidden)
+            assert_schema_conform(403)
           end
         end
 
@@ -49,6 +50,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
           it 'returns forbidden' do
             get('/mobile/v0/appointments', headers: sis_headers, params:)
             expect(response).to have_http_status(:forbidden)
+            assert_schema_conform(403)
           end
         end
 
@@ -78,6 +80,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
             end
           end
           expect(response).to have_http_status(:ok)
+          assert_schema_conform(200)
           location = response.parsed_body.dig('data', 0, 'attributes', 'location')
           physical_location = response.parsed_body.dig('data', 0, 'attributes', 'physicalLocation')
           comments = response.parsed_body.dig('data', 0, 'attributes', 'comment')
@@ -122,7 +125,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
             end
           end
           expect(response).to have_http_status(:ok)
-          expect(response.body).to match_json_schema('VAOS_v2_appointments')
+          assert_schema_conform(200)
           location = response.parsed_body.dig('data', 0, 'attributes', 'location')
           expect(location).to eq({ 'id' => nil,
                                    'name' => nil,
@@ -169,7 +172,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
             end
           end
           expect(response).to have_http_status(:ok)
-          expect(response.body).to match_json_schema('VAOS_v2_appointments')
+          assert_schema_conform(200)
           expect(response.parsed_body.dig('data', 0, 'attributes', 'healthcareService')).to be_nil
         end
 
@@ -201,6 +204,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
           end
 
           expect(response).to have_http_status(:multi_status)
+          # assert_schema_conform(200) why don't we have this documented?
           expect(response.parsed_body['data'].count).to eq(1)
           expect(response.parsed_body['meta']).to include(
             {
@@ -231,7 +235,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
           end
           attributes = response.parsed_body.dig('data', 0, 'attributes')
           expect(response).to have_http_status(:ok)
-          expect(response.body).to match_json_schema('VAOS_v2_appointments')
+          assert_schema_conform(200)
 
           expect(attributes['appointmentType']).to eq('VA_VIDEO_CONNECT_ONSITE')
           expect(attributes['location']).to eq({ 'id' => '983',
@@ -389,6 +393,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
           it 'returns forbidden' do
             get('/mobile/v0/appointments', headers: sis_headers, params:)
             expect(response).to have_http_status(:forbidden)
+            assert_schema_conform(403)
           end
         end
 
@@ -398,6 +403,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
           it 'returns forbidden' do
             get('/mobile/v0/appointments', headers: sis_headers, params:)
             expect(response).to have_http_status(:forbidden)
+            assert_schema_conform(403)
           end
         end
 
@@ -412,6 +418,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
               end
             end
             expect(response).to have_http_status(:ok)
+            assert_schema_conform(200)
           end
         end
       end
@@ -427,6 +434,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
             end
           end
           expect(response).to have_http_status(:ok)
+          assert_schema_conform(200)
           location = response.parsed_body.dig('data', 0, 'attributes', 'location')
           physical_location = response.parsed_body.dig('data', 0, 'attributes', 'physicalLocation')
           expect(response.body).to match_json_schema('VAOS_v2_appointments')
@@ -468,7 +476,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
             end
           end
           expect(response).to have_http_status(:ok)
-          expect(response.body).to match_json_schema('VAOS_v2_appointments')
+          assert_schema_conform(200)
           location = response.parsed_body.dig('data', 0, 'attributes', 'location')
           expect(location).to eq({ 'id' => nil,
                                    'name' => nil,
@@ -498,7 +506,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
               end
             end
           end
-          expect(response.body).to match_json_schema('VAOS_v2_appointments')
+          assert_schema_conform(200)
           expect(response.parsed_body.dig('data', 0, 'attributes', 'vetextId')).to eq('442;3220827.043')
         end
       end
@@ -516,7 +524,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
             end
           end
           expect(response).to have_http_status(:ok)
-          expect(response.body).to match_json_schema('VAOS_v2_appointments')
+          assert_schema_conform(200)
           expect(response.parsed_body.dig('data', 0, 'attributes', 'healthcareService')).to be_nil
         end
 
@@ -578,7 +586,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
           end
           attributes = response.parsed_body.dig('data', 0, 'attributes')
           expect(response).to have_http_status(:ok)
-          expect(response.body).to match_json_schema('VAOS_v2_appointments')
+          assert_schema_conform(200)
 
           expect(attributes['appointmentType']).to eq('VA_VIDEO_CONNECT_ONSITE')
           expect(attributes['location']).to eq({ 'id' => '983',

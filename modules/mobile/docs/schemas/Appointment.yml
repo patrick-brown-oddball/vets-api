@@ -47,6 +47,7 @@ properties:
         example: MzA4OzIwMjAxMTAzLjA5MDAwMDs0NDI7Q0hZIFBDIEtJTFBBVFJJQ0s=
       comment:
         type: string
+        nullable: true
         example: Please arrive 20 minutes before the start of your appointment
       healthcareProvider:
         type: string
@@ -138,6 +139,7 @@ properties:
             example: GL32C
       physicalLocation:
         type: string
+        nullable: true
         example: Blind Rehabilitation Center
       minutesDuration:
         type: integer
@@ -159,6 +161,7 @@ properties:
         example: BOOKED
       statusDetail:
         type: string
+        nullable: true
         description: For a cancelled appointment return details about who or why it was cancelled.
         enum: [ CANCELLED BY CLINIC & AUTO RE-BOOK,
                 CANCELLED BY CLINIC,
@@ -168,12 +171,14 @@ properties:
         example: BOOKED
       timeZone:
         type: string
+        nullable: true
         example: "America/Los_Angeles"
       vetextId:
         type: string
         example: 308;20210106.140000
       reason:
         type: string
+        nullable: true
         example: "Follow-up/Routine: Reason 1"
       isCovidVaccine:
         type: boolean
@@ -187,6 +192,7 @@ properties:
         example: [{ date: "10/01/2020", time: "AM" }, { date: "10/01/2020", time: "PM" }, { date: null, time: null }]
       typeOfCare:
         type: string
+        nullable: true
         example: "Primary Care"
       patientPhoneNumber:
         type: string
@@ -202,6 +208,7 @@ properties:
         example: ["Morning", "Afternoon", "Evening"]
       friendlyLocationName:
         type: string
+        nullable: true
         example: "CHYSHR-Cheyenne VA Medical Center"
       serviceCategoryName:
         type: string
