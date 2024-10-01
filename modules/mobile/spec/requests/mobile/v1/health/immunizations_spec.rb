@@ -30,11 +30,8 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
         end
       end
 
-      it 'returns a 200' do
+      it 'returns a 200 that matches the expected schema' do
         expect(response).to have_http_status(:ok)
-      end
-
-      it 'matches the expected schema' do
         assert_schema_conform(200)
       end
 
@@ -127,6 +124,7 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
 
       it 'returns a 502' do
         expect(response).to have_http_status(:bad_gateway)
+        assert_schema_conform(502)
         error = { 'errors' => [{ 'title' => 'Bad Gateway',
                                  'detail' => 'Received an an invalid response from the upstream server',
                                  'code' => 'MOBL_502_upstream_error',
@@ -139,11 +137,6 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
       let(:immunizations_request_non_covid_paginated) do
         VCR.use_cassette('mobile/lighthouse_health/get_immunizations', match_requests_on: %i[method uri]) do
           get '/mobile/v1/health/immunizations', headers: sis_headers, params: { page: { size: 1, number: 11 } }
-        end
-      end
-      let(:immunizations_request_covid_no_manufacturer_paginated) do
-        VCR.use_cassette('mobile/lighthouse_health/get_immunizations', match_requests_on: %i[method uri]) do
-          get '/mobile/v1/health/immunizations', headers: sis_headers, params: { page: { size: 1, number: 2 } }
         end
       end
       let(:immunizations_request_non_covid_with_manufacturer_paginated) do
@@ -286,7 +279,7 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
         end
 
         dates = response.parsed_body['data'].collect { |i| i['attributes']['date'] }
-        expect(dates).to contain_exactly('2022-03-13T09:59:25Z', '2021-05-09T09:59:25Z', '2021-04-18T09:59:25Z',
+        expect(dates).to match_arrays('2022-03-13T09:59:25Z', '2021-05-09T09:59:25Z', '2021-04-18T09:59:25Z',
                                          '2020-03-01T09:59:25Z', '2020-03-01T09:59:25Z', '2019-02-24T09:59:25Z',
                                          '2018-02-18T09:59:25Z', '2017-02-12T09:59:25Z', '2016-02-07T09:59:25Z',
                                          '2015-02-01T09:59:25Z', '2014-01-26T09:59:25Z')

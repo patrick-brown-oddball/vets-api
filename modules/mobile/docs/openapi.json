@@ -318,7 +318,7 @@
         "summary": "/v0/appeal/{id}"
       }
     },
-    "/v0/appointments": {
+    "/mobile/v0/appointments": {
       "get": {
         "description": "Given a date range returns a list of upcoming VA, Community Care, and Express Care appointments. If start and end date ranges are not passed in then it defaults to - 1 year and + 1 year from the beginning of today's UTC date. Requesting a page out of bounds will return an empty list.",
         "parameters": [
@@ -5919,7 +5919,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SecureMessageList_v1"
+                  "$ref": "#/components/schemas/SecureMessageListV1"
                 }
               }
             },
@@ -6790,7 +6790,7 @@
                 "schema": {
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/User_v1"
+                      "$ref": "#/components/schemas/UserV1"
                     },
                     "meta": {
                       "properties": {
@@ -6868,7 +6868,7 @@
                 "schema": {
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/User_v2"
+                      "$ref": "#/components/schemas/UserV2"
                     }
                   }
                 }
@@ -8098,7 +8098,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Immunizations_v1"
+                  "$ref": "#/components/schemas/ImmunizationsV1"
                 }
               }
             },
@@ -20425,7 +20425,7 @@
           }
         }
       },
-      "SecureMessageList_v1": {
+      "SecureMessageListV1": {
         "type": "object",
         "required": [
           "data",
@@ -21869,7 +21869,7 @@
           }
         }
       },
-      "User_v1": {
+      "UserV1": {
         "type": "object",
         "required": [
           "id",
@@ -22012,7 +22012,7 @@
           }
         }
       },
-      "User_v2": {
+      "UserV2": {
         "type": "object",
         "required": [
           "id",
@@ -22729,7 +22729,7 @@
           }
         }
       },
-      "Immunizations_v1": {
+      "ImmunizationsV1": {
         "type": "object",
         "required": [
           "data",

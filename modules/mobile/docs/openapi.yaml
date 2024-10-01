@@ -108,7 +108,7 @@ paths:
       security:
         - Bearer: []
       summary: /v0/appeal/{id}
-  /v0/appointments:
+  /mobile/v0/appointments:
     get:
       description: Given a date range returns a list of upcoming VA, Community Care,
         and Express Care appointments. If start and end date ranges are not passed
@@ -3337,7 +3337,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/v1/SecureMessageList_v1.yml
+                $ref: ./schemas/v1/SecureMessageListV1.yml
           description: OK
         '401':
           $ref: '#/components/responses/401'
@@ -3877,7 +3877,7 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: ./schemas/v1/User_v1.yml
+                    $ref: ./schemas/v1/UserV1.yml
                   meta:
                     properties:
                       availableServices:
@@ -3929,7 +3929,7 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: ./schemas/v2/User_v2.yml
+                    $ref: ./schemas/v2/UserV2.yml
           description: OK
         '401':
           $ref: '#/components/responses/401'
@@ -4670,7 +4670,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/v1/Immunizations_v1.yml
+                $ref: ./schemas/v1/ImmunizationsV1.yml
           description: OK
         '401':
           $ref: '#/components/responses/401'
