@@ -6,6 +6,14 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
   include JsonSchemaMatchers
   include Committee::Rails::Test::Methods
 
+  RSpec.configure do |config|
+    config.add_setting :committee_options
+    config.committee_options = {
+      schema_path: Rails.root.join('modules', 'mobile', 'docs', 'openapi.json').to_s,
+      prefix: '/mobile'
+    }
+  end
+
   let!(:user) { sis_user(icn: '9000682') }
   let(:rsa_key) { OpenSSL::PKey::RSA.generate(2048) }
 
@@ -17,10 +25,6 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
   end
 
   after { Timecop.return }
-
-  def committee_options
-    @committee_options ||= { schema_path: Rails.root.join('modules', 'mobile', 'docs', 'openapi.json').to_s }
-  end
 
   describe 'GET /mobile/v1/health/immunizations' do
     context 'when the expected fields have data' do
@@ -279,10 +283,10 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
         end
 
         dates = response.parsed_body['data'].collect { |i| i['attributes']['date'] }
-        expect(dates).to match_arrays('2022-03-13T09:59:25Z', '2021-05-09T09:59:25Z', '2021-04-18T09:59:25Z',
+        expect(dates).to eq(['2022-03-13T09:59:25Z', '2021-05-09T09:59:25Z', '2021-04-18T09:59:25Z',
                                          '2020-03-01T09:59:25Z', '2020-03-01T09:59:25Z', '2019-02-24T09:59:25Z',
                                          '2018-02-18T09:59:25Z', '2017-02-12T09:59:25Z', '2016-02-07T09:59:25Z',
-                                         '2015-02-01T09:59:25Z', '2014-01-26T09:59:25Z')
+                                         '2015-02-01T09:59:25Z', '2014-01-26T09:59:25Z'])
       end
     end
 

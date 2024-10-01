@@ -108,7 +108,7 @@ paths:
       security:
         - Bearer: []
       summary: /v0/appeal/{id}
-  /mobile/v0/appointments:
+  /v0/appointments:
     get:
       description: Given a date range returns a list of upcoming VA, Community Care,
         and Express Care appointments. If start and end date ranges are not passed
@@ -4641,7 +4641,7 @@ paths:
       security:
         - Bearer: []
       summary: /v0/user/phones
-  /mobile/v1/health/immunizations:
+  /v1/health/immunizations:
     get:
       description: Returns a paginated list of immunization records for given user
       parameters:

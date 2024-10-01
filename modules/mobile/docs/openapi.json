@@ -318,7 +318,7 @@
         "summary": "/v0/appeal/{id}"
       }
     },
-    "/mobile/v0/appointments": {
+    "/v0/appointments": {
       "get": {
         "description": "Given a date range returns a list of upcoming VA, Community Care, and Express Care appointments. If start and end date ranges are not passed in then it defaults to - 1 year and + 1 year from the beginning of today's UTC date. Requesting a page out of bounds will return an empty list.",
         "parameters": [
@@ -8058,7 +8058,7 @@
         "summary": "/v0/user/phones"
       }
     },
-    "/mobile/v1/health/immunizations": {
+    "/v1/health/immunizations": {
       "get": {
         "description": "Returns a paginated list of immunization records for given user",
         "parameters": [
