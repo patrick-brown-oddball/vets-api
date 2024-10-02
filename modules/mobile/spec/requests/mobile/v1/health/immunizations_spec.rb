@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 require_relative '../../../../support/helpers/rails_helper'
-require_relative '../../../../support/helpers/committee_helper'
 
 RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, type: :request do
   include JsonSchemaMatchers
-  include Committee::Rails::Test::Methods
 
   let!(:user) { sis_user(icn: '9000682') }
   let(:rsa_key) { OpenSSL::PKey::RSA.generate(2048) }
@@ -27,7 +25,7 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
         end
       end
 
-      it 'returns a 200 that matches the expected schema' do
+      it 'returns a 200 that matches the expected schema', :openapi_schema_validation do
         expect(response).to have_http_status(:ok)
         assert_schema_conform(200)
       end
@@ -119,7 +117,7 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
         end
       end
 
-      it 'returns a 502' do
+      it 'returns a 502', :openapi_schema_validation do
         expect(response).to have_http_status(:bad_gateway)
         assert_schema_conform(502)
         error = { 'errors' => [{ 'title' => 'Bad Gateway',

@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 require_relative '../../../../support/helpers/rails_helper'
-require_relative '../../../../support/helpers/committee_helper'
 
-RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
+RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, type: :request do
   include JsonSchemaMatchers
-  include Committee::Rails::Test::Methods
 
   let!(:user) { sis_user(icn: '1012846043V576341', vha_facility_ids: [402, 555]) }
 
@@ -204,7 +202,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', type: :request do
           end
 
           expect(response).to have_http_status(:multi_status)
-          # assert_schema_conform(200) why don't we have this documented?
+          # assert_schema_conform(207) why don't we have this documented?
           expect(response.parsed_body['data'].count).to eq(1)
           expect(response.parsed_body['meta']).to include(
             {

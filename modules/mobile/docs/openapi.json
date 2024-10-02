@@ -8829,6 +8829,7 @@
       },
       "Appointment": {
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "type",
           "id",
@@ -8846,6 +8847,7 @@
           },
           "attributes": {
             "type": "object",
+            "additionalProperties": false,
             "required": [
               "appointmentType",
               "appointmentIen",
@@ -8907,6 +8909,7 @@
               },
               "location": {
                 "type": "object",
+                "additionalProperties": false,
                 "required": [
                   "id",
                   "name",
@@ -8930,6 +8933,7 @@
                   },
                   "address": {
                     "type": "object",
+                    "additionalProperties": false,
                     "required": [
                       "street",
                       "city",
@@ -8971,6 +8975,7 @@
                   },
                   "phone": {
                     "type": "object",
+                    "additionalProperties": false,
                     "required": [
                       "areaCode",
                       "number",
@@ -9132,6 +9137,7 @@
       },
       "Appointments": {
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "data",
           "meta"
@@ -17817,6 +17823,7 @@
       },
       "ImmunizationRecord": {
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "type",
           "id",
@@ -17835,6 +17842,7 @@
           },
           "attributes": {
             "type": "object",
+            "additionalProperties": false,
             "required": [
               "cvxCode",
               "date",
@@ -17888,12 +17896,14 @@
           },
           "relationships": {
             "type": "object",
+            "additionalProperties": false,
             "required": [
               "location"
             ],
             "properties": {
               "location": {
                 "type": "object",
+                "additionalProperties": false,
                 "required": [
                   "data",
                   "links"
@@ -17901,6 +17911,7 @@
                 "properties": {
                   "data": {
                     "type": "object",
+                    "additionalProperties": false,
                     "nullable": true,
                     "required": [
                       "id",
@@ -17919,6 +17930,7 @@
                   },
                   "links": {
                     "type": "object",
+                    "additionalProperties": false,
                     "required": [
                       "related"
                     ],
