@@ -338,6 +338,20 @@ module VAOS
         VAOS::AppointmentsHelper.log_appt_id_location_name(appt)
       end
 
+      def sort_clinics(appt_list)
+        # create list of clinic names and appointment times
+        clinic_list = []
+        appt_list.each do |appt|
+          clinic_list << {
+            'name': "#{appt[:service_name]}"
+            'time': "#{appt[:preferred_dates]}"
+          }
+        end
+
+        # sort the clinic names chronologically based on appointment times
+        clinic_list.sort_by { |h| h["time"] }
+      end
+
       def appointment_provider_name_service
         @appointment_provider_name_service ||= AppointmentProviderName.new(user)
       end
