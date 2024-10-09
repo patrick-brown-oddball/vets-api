@@ -74,6 +74,8 @@
   "postStartCommand": "sh .devcontainer/post-start.sh",
   "postAttachCommand": {
     "server": "bin/rails server",
-    "sidekiq": "bundle exec sidekiq"
+    "sidekiq": "bundle exec sidekiq",
+    "website": "/workspaces/vets-website yarn watch"
+
   }
 }
