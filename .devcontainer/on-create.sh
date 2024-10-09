@@ -16,11 +16,7 @@ asdf install ruby $( cat .ruby-version )
 asdf global ruby $( cat .ruby-version )
 
 # Clone needed repos
-# Clone needed repos
-if ! git clone https://github.com/department-of-veterans-affairs/vets-api-mockdata.git /workspaces/vets-api-mockdata; then
-  echo "Failed to clone vets-api-mockdata repository" >> "$HOME/status"
-  exit 1
-fi
+git clone https://github.com/department-of-veterans-affairs/vets-api-mockdata.git /workspaces/vets-api-mockdata
 
 # Install dependencies
 sudo apt-get update
