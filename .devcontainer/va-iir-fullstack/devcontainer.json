@@ -1,5 +1,5 @@
 {
-  "name": "native",
+  "name": "va-iir fullstack",
   "image": "mcr.microsoft.com/devcontainers/base:bookworm",
 
   "customizations": {
@@ -75,13 +75,12 @@
     }
   },
 
-  "onCreateCommand": "sh .devcontainer/on-create.sh",
-  "postCreateCommand": "sh .devcontainer/post-create.sh",
-  "postStartCommand": "sh .devcontainer/post-start.sh",
+  "onCreateCommand": "sh .devcontainer/va-iir-fullstack/on-create.sh",
+  "postCreateCommand": "sh .devcontainer/va-iir-fullstack/post-create.sh",
+  "postStartCommand": "sh .devcontainer/va-iir-fullstack/post-start.sh",
   "postAttachCommand": {
     "server": "bin/rails server",
     "sidekiq": "bundle exec sidekiq",
-    "website": "yarn --cwd /workspaces/vets-website watch"
-
+    "website": "sh .devcontainer/va-iir-fullstack/run-vets-website.sh"
   }
 }
