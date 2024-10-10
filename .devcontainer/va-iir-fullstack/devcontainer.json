@@ -42,6 +42,7 @@
 
   "forwardPorts": [
     3000,
+    3001,
     9293,
     5432,
     6379
@@ -50,6 +51,11 @@
     "3000": {
       "label": "vets-api",
       "onAutoForward": "notify",
+      "requireLocalPort": true
+    },
+    "3001": {
+      "label": "vets-website",
+      "onAutoForward": "silent",
       "requireLocalPort": true
     },
     "9293": {
@@ -74,6 +80,8 @@
   "postStartCommand": "sh .devcontainer/post-start.sh",
   "postAttachCommand": {
     "server": "bin/rails server",
-    "sidekiq": "bundle exec sidekiq"
+    "sidekiq": "bundle exec sidekiq",
+    "website": "yarn --cwd /workspaces/vets-website watch"
+
   }
 }

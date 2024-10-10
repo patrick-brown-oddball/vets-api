@@ -23,8 +23,7 @@ sudo apt-get update
 sudo apt-get install -y libpq-dev pdftk shared-mime-info postgresql-15-postgis-3 tmux xclip
 
 # only run apt upgrade on pre-build
-if [ "$CODESPACE_NAME" = "null" ]
-then
+if [ "$CODESPACE_NAME" = "null" ]; then
     sudo apt-get update
     sudo apt-get upgrade -y
     sudo apt-get autoremove -y
