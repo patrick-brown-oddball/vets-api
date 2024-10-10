@@ -229,18 +229,22 @@ module VAOS
         requested_periods = appointment[:requested_periods]
         if requested_periods.present? && appointment[:preferred_dates].blank?
           dates = []
+          raw_dates = []
 
           requested_periods.each do |period|
             unless period&.[](:start).nil?
               datetime = DateTime.parse(period[:start])
               if datetime.strftime('%p') == 'AM'
                 dates.push(datetime.strftime(OUTPUT_FORMAT_AM))
+                raw_dates.push(datetime)
               else
                 dates.push(datetime.strftime(OUTPUT_FORMAT_PM))
+                raw_dates.push(datetime)
               end
             end
           end
 
+          appointment[:unfmt_dates] = raw_dates unless raw_dates.nil?
           appointment[:preferred_dates] = dates unless dates.nil?
         end
       end
@@ -342,14 +346,15 @@ module VAOS
         # create list of clinic names and appointment times
         clinic_list = []
         appt_list.each do |appt|
-          clinic_list << {
-            'name': "#{appt[:service_name]}"
-            'time': "#{appt[:preferred_dates]}"
-          }
+          # only need the first date entry in each iteration
+          clinic_list.push({
+            'name': "#{appt[:service_name]}",
+            'time': "#{appt[:unfmt_dates][0]}"
+          })
         end
 
         # sort the clinic names chronologically based on appointment times
-        clinic_list.sort_by { |h| h["time"] }
+        clinic_list.sort_by { |cl| cl["time"] }
       end
 
       def appointment_provider_name_service
