@@ -9,8 +9,10 @@ asdf global ruby $( cat .ruby-version )
 echo "Ensuring packages are up to date..."
 bundle install
 
+echo "Running database migrations/seeding database..."
 bin/rails db:create
 bin/rails db:schema:load
+bin/rails db:migrate
 bin/rails db:seed
 bin/rails runner db/seeds/development.rb
 
