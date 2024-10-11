@@ -9,6 +9,11 @@ asdf global ruby $( cat .ruby-version )
 echo "Ensuring packages are up to date..."
 bundle install
 
+bin/rails db:create
+bin/rails db:schema:load
+bin/rails db:seed
+bin/rails runner db/seeds/development.rb
+
 echo "Starting redis..."
 nohup /home/linuxbrew/.linuxbrew/opt/redis@6.2/bin/redis-server /home/linuxbrew/.linuxbrew/etc/redis.conf >> log/redis.log 2>&1 &
 

@@ -81,6 +81,6 @@
   "postAttachCommand": {
     "server": "bin/rails server",
     "sidekiq": "bundle exec sidekiq",
-    "website": "sh .devcontainer/va-iir-fullstack/run-vets-website.sh"
+    "website": "yarn --cwd /workspaces/vets-website watch"
   }
 }
