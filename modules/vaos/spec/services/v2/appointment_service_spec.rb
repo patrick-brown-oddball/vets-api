@@ -1565,4 +1565,24 @@ describe VAOS::V2::AppointmentsService do
       expect(appt[:preferred_dates]).not_to be_nil
     end
   end
+
+  describe '#sort_clinics' do
+    let(:appt_for_sort_1) do
+      { service_name: 'Clinic A', unfmt_dates: ["2021-09-08T12:00:00Z"] }
+    end
+    let(:appt_for_sort_2) do
+      { service_name: 'Clinic B', unfmt_dates: ["2022-01-13T00:00:00Z", "2021-09-13T12:00:00Z"] }
+    end
+    let(:appt_for_sort_3) do
+      { service_name: 'Clinic C', unfmt_dates: ["2021-09-07T00:00:00Z"] }
+    end
+    let(:appt_list_for_sort) do
+      [appt_for_sort_1, appt_for_sort_2, appt_for_sort_3]
+    end
+
+    it 'sorts clinics based on recently visited' do
+      sorted_clinics = subject.send(:sort_clinics, appt_list_for_sort)
+      expect(sorted_clinics[0]&.[](:name)).to eq('Clinic C')
+    end
+  end
 end

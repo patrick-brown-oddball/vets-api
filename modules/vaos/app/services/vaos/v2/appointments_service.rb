@@ -354,7 +354,7 @@ module VAOS
         end
 
         # sort the clinic names chronologically based on appointment times
-        clinic_list.sort_by { |cl| cl["time"] }
+        clinic_list.sort_by { |cl| cl[:time] }
       end
 
       def appointment_provider_name_service
