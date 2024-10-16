@@ -78,7 +78,6 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, t
             end
           end
           expect(response).to have_http_status(:ok)
-          assert_schema_conform(200)
           location = response.parsed_body.dig('data', 0, 'attributes', 'location')
           physical_location = response.parsed_body.dig('data', 0, 'attributes', 'physicalLocation')
           comments = response.parsed_body.dig('data', 0, 'attributes', 'comment')
@@ -202,7 +201,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, t
           end
 
           expect(response).to have_http_status(:multi_status)
-          # assert_schema_conform(207) why don't we have this documented?
+          assert_schema_conform(207)
           expect(response.parsed_body['data'].count).to eq(1)
           expect(response.parsed_body['meta']).to include(
             {
@@ -271,6 +270,9 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, t
             end
           end
 
+          expect(response).to have_http_status(:ok)
+          assert_schema_conform(200)
+
           appointments = response.parsed_body['data']
           appointment_without_provider = appointments.find { |appt| appt['id'] == '76131' }
           proposed_cc_appointment_with_provider = appointments.find { |appt| appt['id'] == '76132' }
@@ -293,6 +295,10 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, t
                 end
               end
             end
+
+            expect(response).to have_http_status(:ok)
+            assert_schema_conform(200)
+
             appt_ien = response.parsed_body.dig('data', 0, 'attributes', 'appointmentIen')
             expect(response.body).to match_json_schema('VAOS_v2_appointments')
             expect(appt_ien).to eq('11461')
@@ -352,6 +358,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, t
             get '/mobile/v0/appointments', headers: sis_headers
           end
           expect(response).to have_http_status(418)
+          assert_schema_conform(418)
           expect(response.parsed_body).to eq({ 'errors' => [{ 'title' => 'Custom error title',
                                                               'body' => 'Custom error body. \\n This explains to ' \
                                                                         'the user the details of the ongoing issue.',
@@ -554,6 +561,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, t
           end
 
           expect(response).to have_http_status(:multi_status)
+          assert_schema_conform(207)
           expect(response.parsed_body['data'].count).to eq(1)
           expect(response.parsed_body['meta']).to include(
             {
@@ -622,6 +630,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, t
             end
           end
 
+          assert_schema_conform(200)
           appointments = response.parsed_body['data']
 
           appointment_without_provider = appointments.find { |appt| appt['id'] == '76131' }
@@ -645,6 +654,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, t
                 end
               end
             end
+            assert_schema_conform(200)
             appt_ien = response.parsed_body.dig('data', 0, 'attributes', 'appointmentIen')
             expect(response.body).to match_json_schema('VAOS_v2_appointments')
             expect(appt_ien).to eq('11461')
@@ -703,6 +713,7 @@ RSpec.describe 'Mobile::V0::Appointments::VAOSV2', :openapi_schema_validation, t
           VCR.use_cassette('mobile/appointments/VAOS_v2/get_appointment_500', match_requests_on: %i[method uri]) do
             get '/mobile/v0/appointments', headers: sis_headers
           end
+          assert_schema_conform(502)
           expect(response.parsed_body.dig('errors', 0)).to eq({ 'title' => 'Bad Gateway',
                                                                 'detail' => 'The resource could not be found',
                                                                 'code' => '502',

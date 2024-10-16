@@ -819,7 +819,19 @@
                         "upcomingDaysLimit": 7
                       }
                     }
-                  },
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/Appointments"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "207": {
+            "content": {
+              "application/json": {
+                "examples": {
                   "Partial Appointments": {
                     "description": "For cases when 1 or more errors are returned from upstream, an error message with source `VA Service` is added within the meta",
                     "value": {
@@ -895,7 +907,7 @@
                 }
               }
             },
-            "description": "OK"
+            "description": "Multi Status"
           },
           "401": {
             "$ref": "#/components/responses/401"
@@ -949,6 +961,9 @@
           },
           "408": {
             "$ref": "#/components/responses/408"
+          },
+          "418": {
+            "$ref": "#/components/responses/418"
           },
           "422": {
             "$ref": "#/components/responses/422"
@@ -8217,6 +8232,16 @@
         },
         "description": "The response from this API timed out."
       },
+      "418": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CustomErrors"
+            }
+          }
+        },
+        "description": "Custom Error Message"
+      },
       "422": {
         "content": {
           "application/json": {
@@ -9169,6 +9194,49 @@
               "upcomingDaysLimit": {
                 "type": "number",
                 "description": "The number of days into the future used for calculating upcomingAppointmentsCount. The current value is 7."
+              }
+            }
+          }
+        }
+      },
+      "CustomErrors": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "errors"
+        ],
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "title",
+                "body",
+                "source",
+                "telephone",
+                "refreshable"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "body": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "telephone": {
+                  "type": "string"
+                },
+                "refreshable": {
+                  "type": "boolean"
+                },
+                "status": {
+                  "type": "integer"
+                }
               }
             }
           }
