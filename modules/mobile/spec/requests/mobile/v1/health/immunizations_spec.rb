@@ -2,7 +2,8 @@
 
 require_relative '../../../../support/helpers/rails_helper'
 
-RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, type: :request do
+RSpec.describe 'Mobile::V1::Health::Immunizations', :openapi_schema_validation, :skip_json_api_validation,
+               type: :request do
   include JsonSchemaMatchers
 
   let!(:user) { sis_user(icn: '9000682') }
@@ -21,11 +22,11 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
     context 'when the expected fields have data' do
       before do
         VCR.use_cassette('mobile/lighthouse_health/get_immunizations', match_requests_on: %i[method uri]) do
-          get '/mobile/v1/health/immunizations', headers: sis_headers, params: { page: { size: 1 } }
+          get '/mobile/v1/health/immunizations', headers: sis_headers, params: { page: { size: 11 } }
         end
       end
 
-      it 'returns a 200 that matches the expected schema', :openapi_schema_validation do
+      it 'returns a 200 that matches the expected schema' do
         expect(response).to have_http_status(:ok)
         assert_schema_conform(200)
       end
@@ -77,8 +78,9 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
         end
       end
 
-      it 'returns empty array' do
+      it 'returns empty array and matches the expected schema' do
         expect(response).to have_http_status(:ok)
+        assert_schema_conform(200)
         expect(response.parsed_body['data']).to eq([])
       end
     end
@@ -90,8 +92,9 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
         end
       end
 
-      it 'returns a 200' do
+      it 'returns a 200 and matches the expected schema' do
         expect(response).to have_http_status(:ok)
+        assert_schema_conform(200)
       end
 
       it 'returns nil for blank notes' do
@@ -117,7 +120,7 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
         end
       end
 
-      it 'returns a 502', :openapi_schema_validation do
+      it 'returns a 502 and matches the expected schema' do
         expect(response).to have_http_status(:bad_gateway)
         assert_schema_conform(502)
         error = { 'errors' => [{ 'title' => 'Bad Gateway',
@@ -275,9 +278,9 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
 
         dates = response.parsed_body['data'].collect { |i| i['attributes']['date'] }
         expect(dates).to eq(['2022-03-13T09:59:25Z', '2021-05-09T09:59:25Z', '2021-04-18T09:59:25Z',
-                                         '2020-03-01T09:59:25Z', '2020-03-01T09:59:25Z', '2019-02-24T09:59:25Z',
-                                         '2018-02-18T09:59:25Z', '2017-02-12T09:59:25Z', '2016-02-07T09:59:25Z',
-                                         '2015-02-01T09:59:25Z', '2014-01-26T09:59:25Z'])
+                             '2020-03-01T09:59:25Z', '2020-03-01T09:59:25Z', '2019-02-24T09:59:25Z',
+                             '2018-02-18T09:59:25Z', '2017-02-12T09:59:25Z', '2016-02-07T09:59:25Z',
+                             '2015-02-01T09:59:25Z', '2014-01-26T09:59:25Z'])
       end
     end
 
@@ -363,6 +366,7 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
                            match_requests_on: %i[method uri]) do
             get '/mobile/v1/health/immunizations', headers: sis_headers, params: { page: { size: 4 } }
           end
+          assert_schema_conform(200)
           expect(response.parsed_body['data'][0]['attributes']).to eq(
             {
               'cvxCode' => 140,
@@ -413,6 +417,10 @@ RSpec.describe 'Mobile::V1::Health::Immunizations', :skip_json_api_validation, t
                            match_requests_on: %i[method uri]) do
             get '/mobile/v1/health/immunizations', headers: sis_headers
           end
+        end
+
+        it 'matches expected schema' do
+          assert_schema_conform(200)
         end
 
         context '2 vaccine codes exists' do
