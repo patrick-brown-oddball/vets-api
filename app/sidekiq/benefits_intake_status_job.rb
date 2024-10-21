@@ -94,7 +94,7 @@ class BenefitsIntakeStatusJob
         log_result('stale', form_id, uuid, time_to_transition)
       else
         # no change being tracked
-        log_result('pending', form_id, uuid)
+        log_result('pending', form_id, uuid, time_to_transition)
       end
 
       total_handled += 1
@@ -104,9 +104,14 @@ class BenefitsIntakeStatusJob
   end
   # rubocop:enable Metrics/MethodLength
 
-  def log_result(result, form_id, uuid, time_to_transition = nil, error_message = nil)
+  def log_result(result, form_id, uuid, time_to_transition, error_message = nil)
     StatsD.increment("#{STATS_KEY}.#{form_id}.#{result}")
     StatsD.increment("#{STATS_KEY}.all_forms.#{result}")
+
+    if result == 'pending' && time_to_transition < 1.day
+      StatsD.increment("#{STATS_KEY}.all_forms.pending_within_last_day")
+    end
+
     if result == 'failure'
       tags = ['service:veteran-facing-forms', "function:#{form_id} form submission to Lighthouse"]
       StatsD.increment('silent_failure', tags:)
