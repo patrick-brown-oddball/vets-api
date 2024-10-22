@@ -53,7 +53,7 @@ module MedicalRecords
       super()
       puts "LighthouseClient: initialize"
       puts  Settings.lighthouse.veterans_health.fast_tracker.client_assertion_type
-      icn = "129"
+      icn = "23000219"
       puts "Temp icn for testing with Lighthouse sandbox users: #{icn}"
       # @configuration MedicalRecords::LighthouseConfiguration
       # raise Common::Exceptions::ParameterMissing, 'ICN' if icn.blank?
