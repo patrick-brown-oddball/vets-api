@@ -699,11 +699,13 @@ redis:
   host: localhost
   port: 6379
   app_data:
-    url: redis://localhost:6379
+    url: rediss://localhost:6379
+    ssl_params:
+      ca_cert: ~
   sidekiq:
-    url: redis://localhost:6379
+    url: rediss://localhost:6379
   rails_cache:
-    url: redis://localhost:6379
+    url: rediss://localhost:6379
 
 # Settings for GovDelivery (email delivery)
 govdelivery:
