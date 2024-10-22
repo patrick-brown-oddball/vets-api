@@ -1,13 +1,8 @@
 development: &defaults
   redis:
     url: <%= Settings.redis.app_data.url %>
-    ssl_params:
-      verify_mode: OpenSSL::SSL::VERIFY_PEER
-      ca_file: <%= Settings.redis.app_data.ssl_params.ca_cert %>
   sidekiq:
     url: <%= Settings.redis.sidekiq.url %>
-    ssl_params:
-      verify_mode: OpenSSL::SSL::VERIFY_PEER
   # DO NOT CHANGE BELOW TTL (We have agreement with MHV on this for SSO)
   session_store:
     namespace: vets-api-session
