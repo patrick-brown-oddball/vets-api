@@ -13,6 +13,10 @@ module MedicalRecords
   class Client < Common::Client::Base
     include Common::Client::Concerns::MhvFhirSessionClient
 
+    def use_lighthouse
+      true
+    end
+
     # Default number of records to request per call when searching
     DEFAULT_COUNT = 9999
 
@@ -41,7 +45,7 @@ module MedicalRecords
     # @return [String] Base path for dependent URLs
     #
     def base_path
-      "#{Settings.mhv.medical_records.host}/fhir/"
+      use_lighthouse ? "https://sandbox-api.va.gov/services/fhir/v0/r4/" : "#{Settings.mhv.medical_records.host}/fhir/"
     end
 
     ##
