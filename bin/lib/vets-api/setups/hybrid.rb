@@ -31,10 +31,10 @@ module VetsApi
             'host' => 'localhost',
             'port' => '63790',
             'app_data' => {
-              'url' => 'rediss://localhost:63790'
+              'url' => 'redis://localhost:63790'
             },
             'sidekiq' => {
-              'url' => 'rediss://localhost:63790'
+              'url' => 'redis://localhost:63790'
             }
           }
         }
