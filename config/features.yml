@@ -511,6 +511,10 @@ features:
     actor_type: user
     description: Updates to the daily education reports to remove old data that isn't needed in the new fiscal year
     enable_in_development: true
+  email_update_widget:
+    actor_type: user
+    description: Enables the new React widget for the email updates signup form on the VA homepage
+    enable_in_development: true
   enrollment_verification:
     actor_type: user
     description: Enables access to the Enrollment Verification app
