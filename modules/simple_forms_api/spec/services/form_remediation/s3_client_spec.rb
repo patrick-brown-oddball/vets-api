@@ -174,10 +174,13 @@ module SimpleFormsApi
               end
 
               context 'when an error occurs' do
-                before { allow(File).to receive(:directory?).and_raise('oops') }
+                before { allow(config).to receive(:log_info).and_raise('oops') }
 
-                it 'raises the error' do
+                it 'logs and raises the error' do
                   expect { upload }.to raise_exception(RuntimeError, 'oops')
+                  expect(Rails.logger).to have_received(:error).with(
+                    hash_including(message: 'SimpleFormsApi::FormRemediation::S3Client initialization failed')
+                  )
                 end
               end
             end
