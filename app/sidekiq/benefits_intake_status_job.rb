@@ -42,7 +42,10 @@ class BenefitsIntakeStatusJob
     intake_service = BenefitsIntake::Service.new
 
     pending_form_submissions.each_slice(batch_size) do |batch|
-      batch_uuids = batch.map { |submission| submission.latest_attempt&.benefits_intake_uuid }
+      batch_uuids = batch.map do |submission|
+        # TODO: Remove submission.benefits_intake_uuid when we remove that column from the form_submissions table
+        submission.benefits_intake_uuid || submission.latest_attempt&.benefits_intake_uuid
+      end
       response = intake_service.bulk_status(uuids: batch_uuids)
 
       # Log the entire response for debugging purposes
