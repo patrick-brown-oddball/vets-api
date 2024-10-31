@@ -5,6 +5,10 @@
 echo "post-create start"
 echo "$(date)    post-create start" >> "$HOME/status"
 
+if [ ! -d "/workspaces/vets-api-mockdata" ]; then
+  git clone https://github.com/department-of-veterans-affairs/vets-api-mockdata.git /workspaces/vets-api-mockdata
+fi
+
 # update the repos
 git -C /workspaces/vets-api-mockdata pull
 git -C /workspaces/vets-api pull
