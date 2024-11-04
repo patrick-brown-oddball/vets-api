@@ -7,7 +7,6 @@ describe VAProfile::V2::ContactInformation::Service, :skip_vet360 do
   subject { described_class.new(user) }
 
   let(:user) { build(:user, :loa3) }
-  let(:vet360_id) { '1781151' }
 
   before do
     allow(user).to receive_messages(vet360_id:, icn: '1234')
