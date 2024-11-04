@@ -213,10 +213,12 @@ module VAProfile
         private
 
         def uuid_with_aaid
+          # return "#{vet360_id}^PI^200VETS^USDVA" if vet360_id
+          return "#{@user.icn}^NI^200M^USVHA" if @user.icn
           return "#{@user.idme_uuid}^PN^200VIDM^USDVA" if @user.idme_uuid
           return "#{@user.logingov_uuid}^PN^200VLGN^USDVA" if @user.logingov_uuid
 
-          "#{vet360_id}^PI^200VETS^USDVA"
+          nil
         end
 
         def vet360_id
@@ -283,6 +285,7 @@ module VAProfile
             raw_response = perform(method, request_path, model.in_json)
             response_class.from(raw_response)
           end
+
         rescue => e
           handle_error(e)
         end
