@@ -2738,8 +2738,7 @@ RSpec.describe 'the v0 API documentation', type: %i[apivore request], order: :de
     end
 
     describe 'profiles v2', :skip_vet360, :initiate_vaprofile do
-      let(:vet360_id) { '1781151' }
-      let(:mhv_user) { build(:user, :loa3, vet360_id:) }
+      let(:mhv_user) { build(:user, :loa3) }
 
       before do
         Flipper.enable(:va_v3_contact_information_service)
@@ -2836,7 +2835,6 @@ RSpec.describe 'the v0 API documentation', type: %i[apivore request], order: :de
 
         VCR.use_cassette('va_profile/v2/contact_information/put_telephone_success') do
           telephone = build(:telephone, :contact_info_v2)
-
           expect(subject).to validate(
             :post,
             '/v0/profile/telephones/create_or_update',
@@ -3014,8 +3012,7 @@ RSpec.describe 'the v0 API documentation', type: %i[apivore request], order: :de
     end
 
     describe 'profile/status v2', :skip_vet360, :initiate_vaprofile do
-      let(:vet360_id) { '1781151' }
-      let(:user) { build(:user, :loa3, vet360_id:) }
+      let(:user) { build(:user, :loa3) }
 
       before do
         Flipper.enable(:va_v3_contact_information_service)
