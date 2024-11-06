@@ -401,10 +401,6 @@ RSpec.describe 'V0::Profile::Addresses', type: :request do
     let(:frozen_time) { Time.zone.parse('2024-08-27T18:51:06.012Z') }
 
     context 'with a 400 response' do
-      before do
-        allow_any_instance_of(User).to receive(:vet360_id).and_return('1781151')
-      end
-
       it 'matches the errors schema', :aggregate_failures do
         VCR.use_cassette('va_profile/v2/contact_information/post_address_w_id_error') do
           post('/v0/profile/addresses', params: address.to_json, headers:)
@@ -538,7 +534,6 @@ RSpec.describe 'V0::Profile::Addresses', type: :request do
         let(:frozen_time) { Time.zone.parse('2024-09-16T16:09:37.000Z') }
 
         before do
-          allow_any_instance_of(User).to receive(:vet360_id).and_return('1781151')
           allow_any_instance_of(User).to receive(:icn).and_return('123498767V234859')
           allow(Settings).to receive(:virtual_hosts).and_return('www.example.com')
         end
