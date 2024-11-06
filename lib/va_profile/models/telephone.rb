@@ -114,8 +114,6 @@ module VAProfile
             textMessagePermInd: @is_text_permitted,
             ttyInd: @is_tty,
             vet360Id: @vet360_id || @vaProfileId,
-            vaProfileId: @vet360_id || @vaProfileId,
-            confirmationDate: @source_date,
             voiceMailAcceptableInd: @is_voicemailable,
             effectiveStartDate: @effective_start_date,
             effectiveEndDate: @effective_end_date

@@ -9,7 +9,7 @@ describe VAProfile::V2::ContactInformation::Service, :skip_vet360 do
   let(:user) { build(:user, :loa3) }
 
   before do
-    allow(user).to receive_messages(vet360_id:, icn: '1234')
+    allow(user).to receive_messages(vet360_id: user.vet360_id, icn: '1234')
     Flipper.enable(:va_v3_contact_information_service)
   end
 

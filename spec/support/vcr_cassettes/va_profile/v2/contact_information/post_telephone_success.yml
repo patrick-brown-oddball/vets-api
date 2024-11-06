@@ -5,7 +5,7 @@ http_interactions:
     uri: <VAPROFILE_URL>/contact-information-hub/contact-information/v2/2.16.840.1.113883.4.349/1%5EPI%5E200VETS%5EUSDVA/telephones
     body:
       encoding: UTF-8
-      string: '{"bio":{"areaCode":"303","countryCode":"1","internationalIndicator":false,"originatingSourceSystem":"VETSGOV","phoneNumber":"5551234","phoneNumberExt":null,"phoneType":"MOBILE","sourceDate":"2024-08-27T18:51:06.012Z","sourceSystemUser":"1234","telephoneId":null,"textMessageCapableInd":true,"textMessagePermInd":true,"ttyInd":true,"vet360Id":"1781151","vaProfileId":"1781151","confirmationDate":"2024-08-27T18:51:06.012Z","voiceMailAcceptableInd":true,"effectiveStartDate":null,"effectiveEndDate":null}}'
+      string: '{"bio":{"areaCode":"303","countryCode":"1","internationalIndicator":false,"originatingSourceSystem":"VETSGOV","phoneNumber":"5551234","phoneNumberExt":null,"phoneType":"MOBILE","sourceDate":"2024-08-27T18:51:06.012Z","sourceSystemUser":"1234","telephoneId":null,"textMessageCapableInd":true,"textMessagePermInd":true,"ttyInd":true,"vet360Id":"1","voiceMailAcceptableInd":true,"effectiveStartDate":null,"effectiveEndDate":null}}'
     headers:
       User-Agent:
       - Vets.gov Agent

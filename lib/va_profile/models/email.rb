@@ -43,7 +43,6 @@ module VAProfile
             sourceSystemUser: @source_system_user,
             sourceDate: @source_date,
             vet360Id: @vet360_id || @vaProfileId,
-            vaProfileId: @vet360_id || @vaProfileId,
             effectiveStartDate: @effective_start_date,
             effectiveEndDate: @effective_end_date
           }
