@@ -245,7 +245,6 @@ RSpec.describe 'V0::Profile::Telephones', type: :request do
         VCR.use_cassette('va_profile/contact_information/delete_telephone_success', VCR::MATCH_EVERYTHING) do
           # The cassette we're using includes the effectiveEndDate in the body.
           # So this test will not pass if it's missing
-          binding.pry
           delete('/v0/profile/telephones', params: telephone.to_json, headers:)
           expect(response).to have_http_status(:ok)
           expect(response).to match_response_schema('va_profile/transaction_response')
