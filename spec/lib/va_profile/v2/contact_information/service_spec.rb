@@ -123,7 +123,7 @@ describe VAProfile::V2::ContactInformation::Service, :skip_vet360 do
     let(:email) do
       build(
         :email, :contact_info_v2, id: 318_927, email_address: 'person43@example.com',
-                                  vet360_id: 1_781_151, source_system_user: user.icn
+                                  vet360_id: user.vet360_id, source_system_user: user.icn
       )
     end
 
@@ -213,7 +213,7 @@ describe VAProfile::V2::ContactInformation::Service, :skip_vet360 do
 
     context 'with a validation key' do
       let(:address) do
-        build(:va_profile_v3_address, :override, country_name: nil)
+        build(:va_profile_v3_address, :override, country_name: nil, vet360_id: user.vet360_id)
       end
 
       it 'overrides the address error', run_at: '2020-02-14T00:19:15.000Z' do
