@@ -169,9 +169,9 @@ class SavedClaim::VeteranReadinessEmploymentClaim < SavedClaim
     end
 
     send_vbms_confirmation_email(user)
-  rescue
+  rescue => e
     Rails.logger.error('Error uploading VRE claim to VBMS.', { user_uuid: user.uuid })
-    send_to_lighthouse!(user)
+    raise e
   end
 
   def to_pdf(file_name = nil)

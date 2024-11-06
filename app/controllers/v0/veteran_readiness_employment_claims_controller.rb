@@ -10,7 +10,14 @@ module V0
       claim = SavedClaim::VeteranReadinessEmploymentClaim.new(form: filtered_params[:form])
 
       if claim.save
-        VRE::Submit1900Job.perform_async(claim.id, encrypted_user)
+        claim.add_claimant_info(current_user)
+        if current_user.participant_id.present?
+          # send directly to VBMS job
+          VRE::Submit1900Job.perform_async(claim.id, encrypted_user)
+        else
+          # send directly to Lighthouse BenefitsIntakeJob
+          claim.send_to_lighthouse!(encrypted_user)
+        end
         Rails.logger.info "ClaimID=#{claim.confirmation_number} Form=#{claim.class::FORM}"
         clear_saved_form(claim.form_id)
         render json: SavedClaimSerializer.new(claim)
