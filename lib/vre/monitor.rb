@@ -18,6 +18,8 @@ module VRE
     end
 
     def track_submission_exhaustion(msg)
+      claim_id, _encrypted_user = msg['args']
+
       additional_context = {
         message: msg
       }
@@ -27,7 +29,10 @@ module VRE
 
       StatsD.increment("#{SUBMISSION_STATS_KEY}.exhausted")
       Rails.logger.error(
-        "Failed all retries on VRE::Submit1900Job, last error: #{msg['error_message']}"
+        "Failed all retries on VRE::BenefitsIntakeSubmit1900Job, last error: #{msg['error_message']}",
+        {
+          claim_id: claim_id
+        }
       )
     end
   end

@@ -40,14 +40,14 @@ describe VRE::Submit1900Job do
     end
 
     it 'calls claim.add_claimant_info' do
-      allow(claim).to receive(:send_to_lighthouse!)
+      allow(claim).to receive(:upload_to_vbms)
       allow(claim).to receive(:send_to_res)
 
       expect(claim).to receive(:add_claimant_info).with(user)
     end
 
     it 'calls claim.send_to_vre' do
-      expect(claim).to receive(:send_to_vre).with(user)
+      expect(claim).to receive(:upload_to_vbms).with(user:)
     end
   end
 

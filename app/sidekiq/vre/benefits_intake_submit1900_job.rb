@@ -26,8 +26,8 @@ module VRE
       claim.send_to_lighthouse!(user)
     rescue => e
       Rails.logger.warn("VRE::BenefitsIntakeSubmit1900Job failed, retrying...: #{e.message}", {
-        saved_claim_id: claim_.id
-      })
+                          saved_claim_id: claim_id
+                        })
       raise
     end
 
