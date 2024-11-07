@@ -16,7 +16,7 @@ module V0
           VRE::Submit1900Job.perform_async(claim.id, encrypted_user)
         else
           # send directly to Lighthouse BenefitsIntakeJob
-          claim.send_to_lighthouse!(encrypted_user)
+          VRE::BenefitsIntakeSubmit1900Job.perform_async(claim.id, encrypted_user)
         end
         Rails.logger.info "ClaimID=#{claim.confirmation_number} Form=#{claim.class::FORM}"
         clear_saved_form(claim.form_id)
