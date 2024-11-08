@@ -68,9 +68,6 @@ module Vye
         end
       end
 
-      # The remaining tests will be done via requests. There were too many issues with RSpec trying to
-      # make them work as controller tests, mostly having to do with post requests.
-
       def create_claimant_response
         response_struct = Struct.new(:body)
         response = response_struct.new({ 'claimant_id' => 1 })
@@ -85,7 +82,7 @@ module Vye
         let(:verfied_through_date) { '2023-11-30' }
 
         before do
-          allow_any_instance_of(Vye::UserInfoPolicy).to receive(:claimant_lookup?).and_return(true)
+          allow_any_instance_of(Vye::UserInfoPolicy).to receive(:verify_claimant?).and_return(true)
           allow_any_instance_of(Vye::DGIB::VerifyClaimant::Service)
             .to receive(:verify_claimant)
             .and_return(verify_claimant_response)
@@ -147,6 +144,87 @@ module Vye
         )
 
         Vye::DGIB::VerifyClaimant::Response.new(200, response)
+      end
+
+      describe '#verification_record' do
+        let(:verification_record_response) { create_verification_record_response }
+        let(:serializer) { Vye::ClaimantVerificationSerializer.new(verification_record_response) }
+
+        before do
+          allow_any_instance_of(Vye::UserInfoPolicy).to receive(:verification_record?).and_return(true)
+          allow_any_instance_of(Vye::DGIB::VerificationRecord::Service)
+            .to receive(:get_verification_record)
+            .and_return(verification_record_response)
+
+          allow(Vye::VerificationRecordSerializer)
+            .to receive(:new)
+            .with(verification_record_response)
+            .and_return(serializer)
+        end
+      end
+
+      context 'when the service returns a successful response' do
+        it 'calls the verification_record_service' do
+          expect_any_instance_of(Vye::DGIB::VerificationRecord::Service).to receive(:get_verification_record)
+
+          # You have to do this or the test will fail.
+          # Something buried in pundit is preventing it from working without it
+          # Consequently, no separate test for pundit
+          expect(controller).to receive(:authorize).with(@current_user, policy_class: UserInfoPolicy).and_return(true)
+
+          subject.params = { claimant_id: }
+          subject.verification_record
+        end
+
+        it 'renders the serialized response with a 200 status' do
+          # You have to do this or the test will fail.
+          # Something buried in pundit is preventing it from working without it
+          # Consequently, no separate test for pundit
+          expect(controller).to receive(:authorize).with(@current_user, policy_class: UserInfoPolicy).and_return(true)
+
+          # Chatgpt says do this, but it does not work:
+          # expect(controller).to receive(:render).with(json: serializer.new(claimant_service_response).to_json)
+          # What works is this
+          expect(controller).to receive(:render).with(json: serializer.serializable_hash.to_json)
+
+          subject.params = { claimant_id: }
+          subject.verification_record
+          expect(serializer.status).to eq(200)
+        end
+      end
+
+      def create_verification_record_response
+        response_struct = Struct.new(:body)
+        response = response_struct.new(
+          {
+            'claimant_id' => 1,
+            'delimiting_date' => '2024-11-01',
+            'verified_details' => {
+              'benefit_type' => 'CH33',
+              'verification_through_date' => '2024-11-01',
+              'verification_method' => 'Initial'
+            },
+
+            'enrollment_verifications' => {
+              'verification_month' => 'December 2023',
+              'verification_begin_date' => '2024-11-01',
+              'verification_end_date' => '2024-11-30',
+              'verification_through_date' => '2024-11-30',
+              'created_date' => '2024-11-01',
+              'verification_method' => 'VYE',
+              'verification_response' => 'Y',
+              'facility_name' => 'University of Texas Austin',
+              'total_credit_hours' => '72',
+              'payment_transmission_date' => '2024-10-15',
+              'last_deposit_amount' => '4500.00',
+              'remaining_entitlement' => '12-31'
+            },
+
+            'payment_on_hold' => true
+          }
+        )
+
+        Vye::DGIB::VerificationRecord::Response.new(200, response)
       end
     end
   end
