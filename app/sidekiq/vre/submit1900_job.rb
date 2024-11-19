@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'vre/monitor'
-
 module VRE
   class Submit1900Job
     include Sidekiq::Job
@@ -15,9 +13,6 @@ module VRE
     sidekiq_options retry: RETRY
 
     sidekiq_retries_exhausted do |msg, _ex|
-      monitor = VRE::Monitor.new
-      monitor.track_submission_exhaustion(msg)
-
       VRE::Submit1900Job.trigger_failure_events(msg) if Flipper.enabled?(:vre_trigger_action_needed_email)
     end
 
@@ -33,7 +28,7 @@ module VRE
     def self.trigger_failure_events(msg)
       claim_id, encrypted_user = msg['args']
       claim = SavedClaim.find(claim_id)
-      claim.send_failure_email(encrypted_user) if claim.present?
+      claim.send_failure_email(msg, encrypted_user) if claim.present?
     end
   end
 end

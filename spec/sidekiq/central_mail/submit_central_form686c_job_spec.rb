@@ -339,7 +339,7 @@ RSpec.describe CentralMail::SubmitCentralForm686cJob, :uploader_helpers do
         exhaustion_msg['args'] = [claim.id, encrypted_vet_info, encrypted_user_struct]
         claim.parsed_form['dependents_application'].delete('veteran_contact_information')
         user_struct.va_profile_email = nil
-        expect(monitor).to receive(:track_submission_exhaustion).with(exhaustion_msg)
+        expect(monitor).to receive(:track_submission_exhaustion).with(exhaustion_msg, email: false)
       end
     end
   end

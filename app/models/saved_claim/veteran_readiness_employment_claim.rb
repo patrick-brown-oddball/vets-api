@@ -3,6 +3,7 @@
 require 'sentry_logging'
 require 'res/ch31_form'
 require 'vre/ch31_form'
+require 'vre/monitor'
 
 class SavedClaim::VeteranReadinessEmploymentClaim < SavedClaim
   include SentryLogging
@@ -280,9 +281,13 @@ class SavedClaim::VeteranReadinessEmploymentClaim < SavedClaim
   # part of the ZSF work, but with the initial timeline it handles the email as intended.
   # Future work will be integrating into the Va Notify common lib:
   # https://github.com/department-of-veterans-affairs/vets-api/blob/master/lib/va_notify/notification_email.rb
-  def send_failure_email(encrypted_user = nil)
+  def send_failure_email(msg, encrypted_user = nil)
+    monitor = VRE::Monitor.new
     user = encrypted_user.present? ? OpenStruct.new(JSON.parse(KmsEncrypted::Box.new.decrypt(encrypted_user))) : nil
     email = parsed_form['email'] || user.try(:va_profile_email)
+
+    monitor.track_submission_exhaustion(msg, email: email.present?)
+
     if email.present?
       VANotify::EmailJob.perform_async(
         email,

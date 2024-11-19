@@ -40,7 +40,22 @@ RSpec.describe VRE::Monitor do
       expect(StatsD).to receive(:increment).with("#{submission_stats_key}.exhausted")
       expect(Rails.logger).to receive(:error).with(log)
 
-      monitor.track_submission_exhaustion(msg)
+      monitor.track_submission_exhaustion(msg, email: false)
+    end
+
+    it 'logs sidekiq job exhaustion with failure avoided' do
+      msg = { 'args' => [claim.id, encrypted_user], error_message: 'Error!' }
+
+      log = "Failed all retries on VRE::Submit1900Job, last error: #{msg['error_message']}"
+      payload = {
+        message: msg
+      }
+
+      expect(monitor).to receive(:log_silent_failure_avoided).with(payload, nil, anything)
+      expect(StatsD).to receive(:increment).with("#{submission_stats_key}.exhausted")
+      expect(Rails.logger).to receive(:error).with(log)
+
+      monitor.track_submission_exhaustion(msg, email: true)
     end
   end
 end

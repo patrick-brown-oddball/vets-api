@@ -60,7 +60,7 @@ RSpec.describe Dependents::Monitor do
       expect(StatsD).to receive(:increment).with("#{submission_stats_key}.exhausted")
       expect(Rails.logger).to receive(:error).with(log)
 
-      monitor.track_submission_exhaustion(msg)
+      monitor.track_submission_exhaustion(msg, email: false)
     end
 
     it 'logs exhaustion with silent failure avoided' do
@@ -75,7 +75,7 @@ RSpec.describe Dependents::Monitor do
       expect(StatsD).to receive(:increment).with("#{submission_stats_key}.exhausted")
       expect(Rails.logger).to receive(:error).with(log)
 
-      monitor.track_submission_exhaustion(msg, true)
+      monitor.track_submission_exhaustion(msg, email: true)
     end
   end
 end
