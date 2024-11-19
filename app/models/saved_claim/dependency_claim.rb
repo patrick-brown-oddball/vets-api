@@ -2,6 +2,7 @@
 
 require 'claims_api/vbms_uploader'
 require 'pdf_utilities/datestamp_pdf'
+require 'dependents/monitor'
 
 class SavedClaim::DependencyClaim < CentralMailClaim
   FORM = '686C-674'
@@ -139,7 +140,9 @@ class SavedClaim::DependencyClaim < CentralMailClaim
   # Future work will be integrating into the Va Notify common lib:
   # https://github.com/department-of-veterans-affairs/vets-api/blob/master/lib/va_notify/notification_email.rb
 
-  def send_failure_email(encrypted_user_struct = nil)
+  # rubocop:disable Metrics/MethodLength
+  def send_failure_email(msg, encrypted_user_struct = nil)
+    monitor = Dependents::Monitor.new
     user_struct = encrypted_user_struct.present? ? JSON.parse(KmsEncrypted::Box.new.decrypt(encrypted_user_struct)) : nil # rubocop:disable Layout/LineLength
     email = parsed_form.dig('dependents_application', 'veteran_contact_information', 'email_address') ||
             user_struct.try(:va_profile_email)
@@ -147,8 +150,9 @@ class SavedClaim::DependencyClaim < CentralMailClaim
     template_ids << Settings.vanotify.services.va_gov.template_id.form21_686c_action_needed_email if submittable_686?
     template_ids << Settings.vanotify.services.va_gov.template_id.form21_674_action_needed_email if submittable_674?
 
-    template_ids.each do |template_id|
-      if email.present?
+    if email.present?
+      monitor.track_submission_exhaustion(msg, email: true)
+      template_ids.each do |template_id|
         VANotify::EmailJob.perform_async(
           email,
           template_id,
@@ -159,8 +163,11 @@ class SavedClaim::DependencyClaim < CentralMailClaim
           }
         )
       end
+    else
+      monitor.track_submission_exhaustion(msg)
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 

@@ -5,7 +5,6 @@ require 'benefits_intake_service/service'
 require 'pdf_utilities/datestamp_pdf'
 require 'pdf_info'
 require 'simple_forms_api_submission/metadata_validator'
-require 'dependents/monitor'
 
 module CentralMail
   class SubmitCentralForm686cJob
@@ -31,12 +30,8 @@ module CentralMail
     sidekiq_options retry: RETRY
 
     sidekiq_retries_exhausted do |msg, _ex|
-      monitor = Dependents::Monitor.new
-      monitor.track_submission_exhaustion(msg)
-
-      saved_claim_id, _, encrypted_user_struct = msg['args']
       if Flipper.enabled?(:dependents_trigger_action_needed_email)
-        CentralMail::SubmitCentralForm686cJob.trigger_failure_events(saved_claim_id, encrypted_user_struct)
+        CentralMail::SubmitCentralForm686cJob.trigger_failure_events(msg)
       end
     end
 
@@ -232,9 +227,10 @@ module CentralMail
       )
     end
 
-    def self.trigger_failure_events(saved_claim_id, encrypted_user_struct)
+    def self.trigger_failure_events(msg)
+      saved_claim_id, _, encrypted_user_struct = msg['args']
       claim = SavedClaim::DependencyClaim.find(saved_claim_id)
-      claim.send_failure_email(encrypted_user_struct)
+      claim.send_failure_email(msg, encrypted_user_struct)
     end
 
     private
