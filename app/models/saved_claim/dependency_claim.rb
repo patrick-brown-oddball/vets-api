@@ -149,9 +149,9 @@ class SavedClaim::DependencyClaim < CentralMailClaim
     template_ids = []
     template_ids << Settings.vanotify.services.va_gov.template_id.form21_686c_action_needed_email if submittable_686?
     template_ids << Settings.vanotify.services.va_gov.template_id.form21_674_action_needed_email if submittable_674?
+    monitor.track_submission_exhaustion(msg, email: email.present?)
 
     if email.present?
-      monitor.track_submission_exhaustion(msg, email: true)
       template_ids.each do |template_id|
         VANotify::EmailJob.perform_async(
           email,
@@ -163,8 +163,6 @@ class SavedClaim::DependencyClaim < CentralMailClaim
           }
         )
       end
-    else
-      monitor.track_submission_exhaustion(msg)
     end
   end
   # rubocop:enable Metrics/MethodLength
