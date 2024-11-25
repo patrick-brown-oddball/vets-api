@@ -132,8 +132,7 @@ module Users
         home_phone: person.home_phone,
         work_phone: person.work_phone,
         temporary_phone: person.temporary_phone,
-        fax_number: person.fax_number,
-        text_permission: contact_info_v2_enabled ? nil : person.text_permission
+        fax_number: person.fax_number
       }
     rescue => e
       scaffold.errors << Users::ExceptionHandler.new(e, 'VAProfile').serialize_error
