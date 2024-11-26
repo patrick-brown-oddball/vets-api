@@ -350,7 +350,6 @@ FactoryBot.define do
     end
 
     trait :api_auth_v2 do
-      vet360_id { '1781151' }
       authn_context { LOA::IDME_LOA3_VETS }
       sign_in do
         {
