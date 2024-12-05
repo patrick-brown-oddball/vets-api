@@ -356,12 +356,23 @@ RSpec.describe 'V0::CaregiversAssistanceClaims', type: :request do
       }
     end
 
+    let(:lockbox) { Lockbox.new(key: Settings.lockbox.master_key) }
+
+    let(:lat) { '34.0522' }
+    let(:long) { '-118.2437' }
+    let(:encrypted_lat) { Base64.strict_encode64(lockbox.encrypt(lat)) }
+    let(:encrypted_lat_iv) { Base64.strict_encode64(lockbox.encrypt(lat)) }
+    let(:encrypted_long) { Base64.strict_encode64(lockbox.encrypt(long)) }
+    let(:encrypted_long_iv) { Base64.strict_encode64(lockbox.encrypt(long)) }
+
     let(:params) do
       {
         'zip' => '90210',
         'state' => 'CA',
-        'lat' => '34.0522',
-        'long' => '-118.2437',
+        'lat' => encrypted_lat,
+        'lat_iv' => encrypted_lat,
+        'long' => encrypted_long,
+        'long_iv' => encrypted_long_iv,
         'radius' => '50',
         'visn' => '1',
         'type' => '1',

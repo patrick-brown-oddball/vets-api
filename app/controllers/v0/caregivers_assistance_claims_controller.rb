@@ -1,12 +1,17 @@
 # frozen_string_literal: true
 
 require 'lighthouse/facilities/v1/client'
+require 'openssl'
+require 'base64'
 module V0
   # Application for the Program of Comprehensive Assistance for Family Caregivers (Form 10-10CG)
   class CaregiversAssistanceClaimsController < ApplicationController
     service_tag 'caregiver-application'
 
     AUDITOR = ::Form1010cg::Auditor.new
+    # key = OpenSSL::Digest.digest('SHA256', 'string-that-is-my-key-and-is-long')
+    # encoded_key = Base64.encode64(key)
+    # LOCKBOX = Lockbox.new(key:)
 
     skip_before_action :authenticate
     before_action :load_user, only: :create
@@ -66,6 +71,45 @@ module V0
       render(json: lighthouse_facilities)
     end
 
+    # def lockbox_decrypt(encrypted_base64)
+    #   encoded_key = 'fOBPCm3uMYGUhedQu+fG0gBWKeQQGi25rhxwkHsQQGs='
+    #   lockbox = Lockbox.new(key: Base64.decode64(encoded_key))
+    #   lockbox.decrypt(Base64.decode64(encrypted_base64))
+    # end
+
+    def decrypt(encrypted_base64)
+      encoded_key = 'fOBPCm3uMYGUhedQu+fG0gBWKeQQGi25rhxwkHsQQGs='
+      # Decode the key and encrypted data
+      key = Base64.decode64(encoded_key)
+
+      encrypted_base64 = encrypted_base64
+                         .tr('-_', '+/')
+                         .ljust((encrypted_base64.length + 3) & ~3, '=') # Add padding if necessary
+
+      encrypted_data = Base64.decode64(encrypted_base64)
+
+      # Extract IV (first 12 bytes) and encrypted content
+      iv = encrypted_data[0...12]
+      encrypted_content = encrypted_data[12..]
+
+      ciphertext = encrypted_content[0..-17] # All except the last 16 bytes (ciphertext)
+      authentication_tag = encrypted_content[-16..] # Last 16 bytes are the authentication tag
+
+      # Decrypt using AES-GCM
+      decipher = OpenSSL::Cipher.new('aes-256-gcm')
+      decipher.decrypt
+      decipher.key = key
+      decipher.iv = iv
+      decipher.auth_tag = authentication_tag
+
+      # Decrypt and remove padding
+      decrypted = decipher.update(ciphertext) + decipher.final
+      decrypted.force_encoding('UTF-8')
+    rescue => e
+      binding.pry
+      puts "Decryption error: #{e}"
+    end
+
     private
 
     def lighthouse_facilities_service
@@ -73,21 +117,32 @@ module V0
     end
 
     def lighthouse_facilities_params
-      params.permit(
-        :zip,
-        :state,
-        :lat,
-        :long,
-        :radius,
-        :visn,
-        :type,
-        :mobile,
-        :page,
-        :per_page,
-        :facilityIds,
-        services: [],
-        bbox: []
-      )
+      permitted_params = params.permit(
+        lighthouse_facilities_params_array
+      ).to_h
+
+      permitted_params[:lat] = decrypt(permitted_params[:lat]) if permitted_params[:lat]
+      permitted_params[:long] = decrypt(permitted_params[:long]) if permitted_params[:long]
+
+      permitted_params
+    end
+
+    def lighthouse_facilities_params_array
+      [:zip,
+       :state,
+       :lat,
+       :lat_iv,
+       :long,
+       :long_iv,
+       :radius,
+       :visn,
+       :type,
+       :mobile,
+       :page,
+       :per_page,
+       :facilityIds,
+       { services: [],
+         bbox: [] }]
     end
 
     def record_submission_attempt
