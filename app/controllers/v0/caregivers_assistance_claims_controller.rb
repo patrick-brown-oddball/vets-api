@@ -9,9 +9,10 @@ module V0
     service_tag 'caregiver-application'
 
     AUDITOR = ::Form1010cg::Auditor.new
-    # key = OpenSSL::Digest.digest('SHA256', 'string-that-is-my-key-and-is-long')
-    # encoded_key = Base64.encode64(key)
-    # LOCKBOX = Lockbox.new(key:)
+
+    # TODO: Regenerate and put these keys in configs somewhere
+    PRIVATE_KEY = "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAwviZmpP4bae1g5lAceQQgdmH1F8HnR9N+SjiVyX3jKq20JjC\nBZ1t8WzS+iji0LeihW5FHoASzAbm8FzM4IanDenCo2Dh8gtVVQoAo4F5Anb3j6Jj\nLGSPnK146MGxbQAqnv3w2ml2Qxq8Uo+Cno1YVWRuHJV6KVnMjnPaYiYkNJJlezPW\nr6Oyoza/eMf4UyhTczhIilp/rUb7+VILCNMDJT+MlWyYMgZQQaVnJmzbnDGWDnbM\nlsgdDSWjeZCajkPdTq4Rn7Do77DozcnCD9evFgpyukvgEjkdHrcvpQyj7So+U00Y\nYrwVGlyA+2xablxRyzwsJBw1nn/Au/J0FYrMvwIDAQABAoIBAA71KzTwiNzCGDWr\njQX6dQkT4GJQFLxJTwjq9IuytiOnYyrCABHrNSiSQeX+5gEU3YCMEvxsie9M0Ox8\nH3GoPZUJK9gEkkD9/ULEEi7OZjNktMhjBmW8+fGPXhkekayRmIjQZZPJXHvNx3M0\nCarSoDC+Pt5YL2I7E+uSgsdd3WWKT9dEFqVQMK02VnqyiHXng04mp8/MyU/+UYy/\nANRezinSnIT6WS7x3BS8vgMYJJIqLSu8tE5jwgltvuczTkPkhfHP2P/t42VUKzu1\nQ3UlHBN6PgrVnOxsY6Nl/b1BdbmLtIIMne+Z2Z10gFEAv+0R3LYyAgGde2eY5w6F\ndfNS51kCgYEA+q5VOZW4DLLOH41tEDvf7S21PiSMly0t1Nfn4NCdeTXhd7IPEYmy\nOnh6f+aFanfPsUb9uko6Y07MF4Ur0h32qNcL/1G9aMVrEH7qTceH6i/yK+IU+7FG\nkTrnvu9cLHBNLheG3JeCz/wzkms/m46gWvjgnyfnLiFv8J+VNuWTGekCgYEAxxuo\nd+llmjUyPG01bIlfB5v6iy9V6LtzqdAmL/zxoaFS6deVusxTA7jzgHuc4hoRU5p+\nl/4fMqtcSawqmHcVkeYsz89yOVIWFy3pvUsBum5W/xc7lIxUVBz1IxD9U4gpfrN0\nsy6dgVYphUR74/nSohXLPi9/aKrPxwsEizYEYGcCgYEAqYpmkX+07sGvrp9T9/rG\nw/556gGGJGil6qHrbZ0qI+RRDUcb8dyS8gCxuPcLnKpTia5dxDSXsLqGRhIHRSCG\nxkJLFu8Nj2KVup5bkSc1wSmUPCG311JaS7bvLa9tQ5DgYh//UgoWqtwDdS+b4XVg\n9qYEJSAztnte3frQTESQbKECgYAnyXcYvyL2dbrcKFaMocbDln+yYHsiTpMGU/nN\njRYb3kjbQaFB+qJ8E/FUs17eL6dWtYCmjrldPrDqZ+T7IpDE3uIFhMamfai8aQhU\nMzDdOD9aKiJVxNT1GfRCVZrJnmPsVZ/0TlRbDASwBMdc/wcALKq4enVTTQ7ID4OQ\n7fJh8QKBgQD5E805SrOG/Yg1pM+XmvR7JWlKuk4YzVgplGeyga7NIdoVVw8psqWZ\nQpdMa8i6TunNGLXBr90UJFL+rJWJsMSXqIj3hTOUU54LxC0IrI5dn62yfpjFNLqq\nbi2+m8K5Sd7QYUHfRUT/1P0CVpxJMj+83fnGo0Bewp0C8oL5PWoHdA==\n-----END RSA PRIVATE KEY-----\n"
+    PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwviZmpP4bae1g5lAceQQ\ngdmH1F8HnR9N+SjiVyX3jKq20JjCBZ1t8WzS+iji0LeihW5FHoASzAbm8FzM4Ian\nDenCo2Dh8gtVVQoAo4F5Anb3j6JjLGSPnK146MGxbQAqnv3w2ml2Qxq8Uo+Cno1Y\nVWRuHJV6KVnMjnPaYiYkNJJlezPWr6Oyoza/eMf4UyhTczhIilp/rUb7+VILCNMD\nJT+MlWyYMgZQQaVnJmzbnDGWDnbMlsgdDSWjeZCajkPdTq4Rn7Do77DozcnCD9ev\nFgpyukvgEjkdHrcvpQyj7So+U00YYrwVGlyA+2xablxRyzwsJBw1nn/Au/J0FYrM\nvwIDAQAB\n-----END PUBLIC KEY-----\n"
 
     skip_before_action :authenticate
     before_action :load_user, only: :create
@@ -71,46 +72,20 @@ module V0
       render(json: lighthouse_facilities)
     end
 
-    # def lockbox_decrypt(encrypted_base64)
-    #   encoded_key = 'fOBPCm3uMYGUhedQu+fG0gBWKeQQGi25rhxwkHsQQGs='
-    #   lockbox = Lockbox.new(key: Base64.decode64(encoded_key))
-    #   lockbox.decrypt(Base64.decode64(encrypted_base64))
-    # end
-
-    def decrypt(encrypted_base64)
-      encoded_key = 'fOBPCm3uMYGUhedQu+fG0gBWKeQQGi25rhxwkHsQQGs='
-      # Decode the key and encrypted data
-      key = Base64.decode64(encoded_key)
-
-      encrypted_base64 = encrypted_base64
-                         .tr('-_', '+/')
-                         .ljust((encrypted_base64.length + 3) & ~3, '=') # Add padding if necessary
-
-      encrypted_data = Base64.decode64(encrypted_base64)
-
-      # Extract IV (first 12 bytes) and encrypted content
-      iv = encrypted_data[0...12]
-      encrypted_content = encrypted_data[12..]
-
-      ciphertext = encrypted_content[0..-17] # All except the last 16 bytes (ciphertext)
-      authentication_tag = encrypted_content[-16..] # Last 16 bytes are the authentication tag
-
-      # Decrypt using AES-GCM
-      decipher = OpenSSL::Cipher.new('aes-256-gcm')
-      decipher.decrypt
-      decipher.key = key
-      decipher.iv = iv
-      decipher.auth_tag = authentication_tag
-
-      # Decrypt and remove padding
-      decrypted = decipher.update(ciphertext) + decipher.final
-      decrypted.force_encoding('UTF-8')
-    rescue => e
-      binding.pry
-      puts "Decryption error: #{e}"
-    end
-
     private
+
+    # TODO: move this to it's own service or something
+    def decrypt(encrypted_base64)
+      encrypted_data = Base64.decode64(encrypted_base64)
+      private_key = OpenSSL::PKey::RSA.new(PRIVATE_KEY)
+
+      begin
+        private_key.decrypt(encrypted_data, rsa_padding_mode: 'oaep', rsa_oaep_md: 'sha256')
+      rescue OpenSSL::PKey::PKeyError
+        Rails.logger.error('CaregiverAssistanceClaimsController: error decrypting params',
+                           { error: e })
+      end
+    end
 
     def lighthouse_facilities_service
       @lighthouse_facilities_service ||= Lighthouse::Facilities::V1::Client.new
