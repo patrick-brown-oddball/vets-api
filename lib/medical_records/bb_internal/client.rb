@@ -154,9 +154,14 @@ module BBInternal
     # @return [void] This method does not return a value. Instead, it yields chunks of the response
     # body via the provided yielder.
     #
-    def get_dicom(study_id, header_callback, yielder)
-      uri = URI.join(config.base_path, "bluebutton/studyjob/zip/stream/#{session.patient_id}/studyidUrn/#{study_id}")
-      streaming_get(uri, token_headers, header_callback, yielder)
+    def get_dicom(_study_id, header_callback, range, yielder)
+      # uri = URI.join(config.base_path, "bluebutton/studyjob/zip/stream/#{session.patient_id}/studyidUrn/#{study_id}")
+      uri = URI.join('http://localhost:3005/', 'download')
+
+      headers = token_headers
+      headers['Range'] = range if range.present?
+
+      streaming_get(uri, headers, header_callback, yielder)
     end
 
     ##
