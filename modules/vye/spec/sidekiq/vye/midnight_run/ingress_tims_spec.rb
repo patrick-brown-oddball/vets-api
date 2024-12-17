@@ -2,7 +2,6 @@
 
 require 'rails_helper'
 require Vye::Engine.root / 'spec/rails_helper'
-require 'timecop'
 
 describe Vye::MidnightRun::IngressTims, type: :worker do
   let(:chunks) do
@@ -18,43 +17,15 @@ describe Vye::MidnightRun::IngressTims, type: :worker do
     Sidekiq::Job.clear_all
   end
 
-  context 'when it is not a holiday' do
-    before do
-      Timecop.freeze(Time.zone.local(2024, 7, 2)) # Regular work day
-    end
+  it 'checks the existence of described_class' do
+    expect(Vye::BatchTransfer::TimsChunk).to receive(:build_chunks).and_return(chunks)
 
-    after do
-      Timecop.return
-    end
+    expect do
+      described_class.perform_async
+    end.to change { Sidekiq::Worker.jobs.size }.by(1)
 
-    it 'checks the existence of described_class' do
-      expect(Vye::BatchTransfer::TimsChunk).to receive(:build_chunks).and_return(chunks)
+    described_class.drain
 
-      expect do
-        described_class.perform_async
-      end.to change { Sidekiq::Worker.jobs.size }.by(1)
-
-      described_class.drain
-
-      expect(Vye::MidnightRun::IngressTimsChunk).to have_enqueued_sidekiq_job.exactly(5).times
-    end
-  end
-
-  context 'when it is a holiday' do
-    before do
-      Timecop.freeze(Time.zone.local(2024, 7, 4)) # Independence Day
-    end
-
-    after do
-      Timecop.return
-    end
-
-    it 'does not process TIMS' do
-      expect(Vye::BatchTransfer::TimsChunk).not_to receive(:build_chunks)
-
-      expect do
-        described_class.new.perform
-      end.not_to(change { Sidekiq::Worker.jobs.size })
-    end
+    expect(Vye::MidnightRun::IngressTimsChunk).to have_enqueued_sidekiq_job.exactly(5).times
   end
 end

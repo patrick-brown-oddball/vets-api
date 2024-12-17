@@ -108,7 +108,7 @@ module ClaimsApi
       ##
       # EBenefitsBnftClaimStatusWebServiceBean
       #
-      module EBenefitsBenefitClaimStatusWebServiceBean
+      module EBenefitsBnftClaimStatusWebService
         DEFINITION =
           Bean.new(
             path: 'EBenefitsBnftClaimStatusWebServiceBean',
@@ -116,14 +116,6 @@ module ClaimsApi
               target: 'http://claimstatus.services.ebenefits.vba.va.gov/',
               data: nil
             )
-          )
-      end
-
-      module EBenefitsBenefitClaimStatusWebService
-        DEFINITION =
-          Service.new(
-            bean: EBenefitsBenefitClaimStatusWebServiceBean::DEFINITION,
-            path: 'EBenefitsBnftClaimStatusWebService'
           )
       end
 

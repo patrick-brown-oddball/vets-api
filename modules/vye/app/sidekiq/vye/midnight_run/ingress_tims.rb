@@ -7,8 +7,6 @@ module Vye
       sidekiq_options retry: 0
 
       def perform
-        return if Vye::CloudTransfer.holiday?
-
         Vye::PendingDocument.delete_all
 
         chunks = BatchTransfer::TimsChunk.build_chunks

@@ -6,8 +6,7 @@ require 'rails_helper'
 require_relative '../../rails_helper'
 require_relative '../../support/swagger_shared_components/v2'
 
-describe 'Veteran Identifier', openapi_spec: Rswag::TextHelpers.new.claims_api_docs, # rubocop:disable RSpec/DescribeClass
-                               skip: 'Disabling tests for deactivated veteran-id:find endpoint' do
+describe 'Veteran Identifier', openapi_spec: Rswag::TextHelpers.new.claims_api_docs do # rubocop:disable RSpec/DescribeClass
   before do
     stub_mpi(profile)
   end
